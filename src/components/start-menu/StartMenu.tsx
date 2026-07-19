@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useWindowManager } from '../../state/window-manager/WindowManagerContext';
 import { contact } from '../../content/contact';
+import { requestMinesweeper } from '../minesweeper/launch';
 import type { WindowId } from '../../types/windows';
 import styles from './StartMenu.module.css';
 
@@ -32,7 +33,7 @@ export function StartMenu({ open, onClose }: { open: boolean; onClose: () => voi
         <nav aria-label="Start menu">{items.map((item) => <button key={item.id} type="button" onClick={() => { if (item.id === 'github') window.open('https://github.com/htenlik', '_blank', 'noopener,noreferrer'); else if (item.id === 'linkedin' && contact.linkedin) window.open(contact.linkedin, '_blank', 'noopener,noreferrer'); else openWindow(item.id as WindowId); onClose(); }}><img src={item.icon} alt="" /><span>{item.label}</span></button>)}</nav>
         <footer><button type="button" onClick={() => { setShutdown(true); onClose(); }}><span aria-hidden="true">⏻</span> Shut Down</button></footer>
       </div>}
-      {shutdown && <div className={styles.overlay} role="presentation" onPointerDown={(e) => { if (e.target === e.currentTarget) setShutdown(false); }}><section role="dialog" aria-modal="true" aria-labelledby="shutdown-title" className={styles.dialog}><h2 id="shutdown-title">Shut Down htenlikOS</h2><p>Before shutting down, you have to beat Expert-level Minesweeper. Sorry — company policy.</p><button className="retro-button" type="button" autoFocus onClick={() => setShutdown(false)}>Return to desktop</button></section></div>}
+      {shutdown && <div className={styles.overlay} role="presentation" onPointerDown={(e) => { if (e.target === e.currentTarget) setShutdown(false); }}><section role="dialog" aria-modal="true" aria-labelledby="shutdown-title" className={styles.dialog}><h2 id="shutdown-title">Shut Down htenlikOS</h2><p>Before shutting down, you have to beat Expert-level Minesweeper. Sorry — company policy.</p><button className="retro-button" type="button" autoFocus onClick={() => { requestMinesweeper('Expert'); openWindow('minesweeper'); setShutdown(false); }}>Play Expert Minesweeper</button></section></div>}
     </>
   );
 }
