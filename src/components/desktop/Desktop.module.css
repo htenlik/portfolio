@@ -12,7 +12,10 @@
 .contextMenu button:hover:not(:disabled), .contextMenu button:focus-visible { color: #fff; background: #316ac5; outline: 0; }
 .contextMenu button:disabled { color: #7f7f7f; text-shadow: 1px 1px #fff; }
 .defaultItem { font-weight: 700; }
+.menuArrow { float: right; margin-left: 24px; font-size: 8px; line-height: 14px; }
 .separator { height: 2px; margin: 3px 2px; border-top: 1px solid #aca899; border-bottom: 1px solid #fff; }
+.refreshing .shortcut { animation: desktopRefresh 180ms steps(1, end); }
+@keyframes desktopRefresh { 0%, 38% { visibility: hidden; } 39%, 100% { visibility: visible; } }
 .properties { position: fixed; z-index: 5100; top: 50%; left: 50%; width: min(330px, calc(100vw - 24px)); padding: 3px; color: #000; font: 11px Tahoma, sans-serif; background: #ece9d8; border: 1px solid #0831d9; box-shadow: 2px 2px 0 rgb(0 0 0 / 45%); transform: translate(-50%, -50%); }
 .propertiesTitle { min-height: 24px; padding: 4px 6px; color: #fff; font-weight: 700; background: linear-gradient(90deg, #0754e9, #4da5f7); }
 .propertiesBody { display: flex; gap: 14px; min-height: 112px; padding: 18px 14px 10px; border: 1px solid #fff; }
@@ -27,3 +30,4 @@
   .icon { width: 100%; min-height: 86px; font-size: 11px; }
   .icon img { width: 46px; height: 46px; }
 }
+@media (prefers-reduced-motion: reduce) { .refreshing .shortcut { animation: none; } }

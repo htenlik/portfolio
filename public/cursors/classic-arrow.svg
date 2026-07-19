@@ -1,5 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-  <path fill="#000" opacity=".32" d="M5 3v23l6-6 4 9 4-2-4-9h9L5 3z" transform="translate(2 2)"/>
-  <path fill="#fff" stroke="#000" stroke-width="1.4" stroke-linejoin="round" d="M4 2v23l6.2-6.2 4.2 9.4 4.1-1.9-4.2-9.2h9.3L4 2z"/>
-  <path fill="#b8b8b8" d="M6.2 6.7v13l3.6-3.6 2.1 4.7 1.8-.8-2.4-5.2h6.2L6.2 6.7z"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" shape-rendering="crispEdges">
+  <!-- Original pixel-built cursor inspired by early-2000s system pointers. -->
+  <path fill="#808080" d="M3 2h2v2h2v2h2v2h2v2h2v2h2v2h7v3h-6l5 10-5 2-5-10-5 5V2z"/>
+  <path fill="#000" d="M1 0h2v2h2v2h2v2h2v2h2v2h2v2h2v2h8v5h-5l5 10-7 3-5-11-7 7H1V0zm2 5v18l7-7h2l5 11 3-1-5-10h7v-1h-8v-2h-2v-2h-2V9H8V7H6V5H3z"/>
+  <path fill="#fff" d="M3 5v18l7-7h2l5 11 3-1-5-10h7v-1h-8v-2h-2v-2h-2V9H8V7H6V5H3z"/>
 </svg>

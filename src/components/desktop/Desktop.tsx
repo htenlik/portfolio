@@ -48,11 +48,13 @@ export function Desktop({ secretVisible = false }: { secretVisible?: boolean }) 
   const [positions, setPositions] = useState<Record<string, Point>>(readPositions);
   const [menu, setMenu] = useState<ContextMenuState | null>(null);
   const [properties, setProperties] = useState<DesktopEntry | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
   const mobile = useMediaQuery('(max-width: 640px), (pointer: coarse)');
   const { openWindow } = useWindowManager();
   const desktopRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const longPressTimer = useRef<number | undefined>(undefined);
+  const refreshTimer = useRef<number | undefined>(undefined);
   const mobilePress = useRef<{ id: string; point: Point } | null>(null);
   const suppressOpen = useRef<string | null>(null);
   const drag = useRef<{ id: string; origin: Point; latest: Point; pointer: Point; moved: boolean } | null>(null);
@@ -82,6 +84,7 @@ export function Desktop({ secretVisible = false }: { secretVisible?: boolean }) 
 
   useEffect(() => () => {
     if (longPressTimer.current) window.clearTimeout(longPressTimer.current);
+    if (refreshTimer.current) window.clearTimeout(refreshTimer.current);
   }, []);
 
   const open = (id: DesktopEntry['id']) => id === 'github'
@@ -114,7 +117,7 @@ export function Desktop({ secretVisible = false }: { secretVisible?: boolean }) 
     setSelected(entry.id);
     setMenu(null);
     if (mobile) {
-      const point = menuPosition(event.clientX, event.clientY, 145);
+      const point = menuPosition(event.clientX, event.clientY, 210);
       mobilePress.current = { id: entry.id, point: { x: event.clientX, y: event.clientY } };
       longPressTimer.current = window.setTimeout(() => {
         suppressOpen.current = entry.id;
@@ -161,10 +164,21 @@ export function Desktop({ secretVisible = false }: { secretVisible?: boolean }) 
     setMenu(null);
   };
 
+  const refreshDesktop = () => {
+    setMenu(null);
+    setSelected(null);
+    setRefreshing(false);
+    window.requestAnimationFrame(() => {
+      setRefreshing(true);
+      if (refreshTimer.current) window.clearTimeout(refreshTimer.current);
+      refreshTimer.current = window.setTimeout(() => setRefreshing(false), 180);
+    });
+  };
+
   return (
     <div ref={desktopRef} className={styles.desktop}>
       <h1 className="sr-only">Hüseyin Tenlik — Software Engineer portfolio</h1>
-      <div className={styles.grid} role="list" aria-label="Desktop shortcuts"
+      <div className={`${styles.grid} ${refreshing ? styles.refreshing : ''}`} role="list" aria-label="Desktop shortcuts" aria-busy={refreshing}
         onPointerDown={(event) => { if (event.target === event.currentTarget) { setSelected(null); setMenu(null); } }}
         onContextMenu={(event) => { if (event.target !== event.currentTarget) return; event.preventDefault(); setSelected(null); setMenu({ kind: 'desktop', ...menuPosition(event.clientX, event.clientY) }); }}>
         {allEntries.map((entry, index) => (
@@ -183,14 +197,14 @@ export function Desktop({ secretVisible = false }: { secretVisible?: boolean }) 
               onDoubleClick={() => { if (!mobile && suppressOpen.current !== entry.id) open(entry.id); }}
               onContextMenu={(event) => {
                 event.preventDefault(); event.stopPropagation(); setSelected(entry.id);
-                setMenu({ kind: 'shortcut', entry, ...menuPosition(event.clientX, event.clientY, 145) });
+                setMenu({ kind: 'shortcut', entry, ...menuPosition(event.clientX, event.clientY, 210) });
               }}
               onKeyDown={(event) => {
                 if (event.key === 'Enter') open(entry.id);
                 if (event.key === 'ContextMenu' || (event.shiftKey && event.key === 'F10')) {
                   event.preventDefault();
                   const rect = event.currentTarget.getBoundingClientRect();
-                  setMenu({ kind: 'shortcut', entry, ...menuPosition(rect.left + 20, rect.top + 20, 145) });
+                  setMenu({ kind: 'shortcut', entry, ...menuPosition(rect.left + 20, rect.top + 20, 210) });
                 }
               }}>
               <img src={entry.icon} alt="" draggable="false" /><span>{entry.label}</span>
@@ -205,22 +219,21 @@ export function Desktop({ secretVisible = false }: { secretVisible?: boolean }) 
           {menu.kind === 'shortcut' && menu.entry ? <>
             <button type="button" role="menuitem" className={styles.defaultItem} onClick={() => { open(menu.entry!.id); setMenu(null); }}>Open</button>
             <div className={styles.separator} role="separator" />
-            <button type="button" role="menuitem" onClick={() => {
-              const index = allEntries.findIndex((entry) => entry.id === menu.entry!.id);
-              place(menu.entry!.id, snap(positionFor(menu.entry!, index))); setMenu(null);
-            }}>Align to Grid</button>
-            <button type="button" role="menuitem" onClick={() => {
-              const index = allEntries.findIndex((entry) => entry.id === menu.entry!.id);
-              place(menu.entry!.id, defaultPosition(index)); setMenu(null);
-            }}>Restore Default Position</button>
+            <button type="button" role="menuitem" disabled>Cut</button>
+            <button type="button" role="menuitem" disabled>Copy</button>
+            <button type="button" role="menuitem" disabled>Create Shortcut</button>
+            <button type="button" role="menuitem" disabled>Delete</button>
+            <button type="button" role="menuitem" disabled>Rename</button>
             <div className={styles.separator} role="separator" />
             <button type="button" role="menuitem" onClick={() => { setProperties(menu.entry!); setMenu(null); }}>Properties</button>
           </> : <>
-            <button type="button" role="menuitem" onClick={arrangeIcons}>Arrange Icons</button>
-            <button type="button" role="menuitem" onClick={() => setMenu(null)}>Refresh</button>
+            <button type="button" role="menuitem" onClick={arrangeIcons}>Arrange Icons By <span className={styles.menuArrow}>▶</span></button>
+            <button type="button" role="menuitem" onClick={refreshDesktop}>Refresh</button>
             <div className={styles.separator} role="separator" />
             <button type="button" role="menuitem" disabled>Paste</button>
             <button type="button" role="menuitem" disabled>Paste Shortcut</button>
+            <div className={styles.separator} role="separator" />
+            <button type="button" role="menuitem" disabled>New <span className={styles.menuArrow}>▶</span></button>
             <div className={styles.separator} role="separator" />
             <button type="button" role="menuitem" onClick={() => { openWindow('about'); setMenu(null); }}>Properties</button>
           </>}

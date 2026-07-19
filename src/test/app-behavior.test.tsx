@@ -8,6 +8,7 @@ import { contact } from '../content/contact';
 import { resumeDownloadName, resumeFile } from '../content/resume';
 import { Taskbar } from '../components/taskbar/Taskbar';
 import { WindowManagerProvider, useWindowManager } from '../state/window-manager/WindowManagerContext';
+import responseHeaders from '../../public/_headers?raw';
 
 function StateProbe() { const { state } = useWindowManager(); return <output data-testid="state">{JSON.stringify(state)}</output>; }
 
@@ -35,14 +36,17 @@ describe('portfolio UI behavior', () => {
     });
   });
 
-  it('provides shortcut and desktop context menus', () => {
+  it('provides classic shortcut and desktop context menus', async () => {
     const { container } = render(<WindowManagerProvider><Desktop /></WindowManagerProvider>);
     fireEvent.contextMenu(screen.getByRole('button', { name: /my computer, shortcut/i }), { clientX: 30, clientY: 30 });
     expect(screen.getByRole('menu', { name: 'My Computer context menu' })).toBeInTheDocument();
     expect(screen.getByRole('menuitem', { name: 'Properties' })).toBeInTheDocument();
     fireEvent.contextMenu(container.querySelector('[role="list"]')!, { clientX: 300, clientY: 200 });
     expect(screen.getByRole('menu', { name: 'Desktop context menu' })).toBeInTheDocument();
-    expect(screen.getByRole('menuitem', { name: 'Arrange Icons' })).toBeInTheDocument();
+    expect(screen.getByRole('menuitem', { name: /Arrange Icons By/ })).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('menuitem', { name: 'Refresh' }));
+    await waitFor(() => expect(container.querySelector('[role="list"]')).toHaveAttribute('aria-busy', 'true'));
+    await waitFor(() => expect(container.querySelector('[role="list"]')).toHaveAttribute('aria-busy', 'false'));
   });
 
   it('opens and closes the Start menu', async () => {
@@ -89,6 +93,8 @@ describe('portfolio UI behavior', () => {
     expect(screen.getByRole('link', { name: 'Open PDF' })).toHaveAttribute('href', resumeFile);
     expect(screen.getByRole('link', { name: 'Download PDF' })).toHaveAttribute('download', resumeDownloadName);
     expect(container.querySelector('iframe')).toHaveAttribute('src', '/huseyin_tenlik_cv.pdf#view=FitH&toolbar=1');
+    expect(responseHeaders).toContain('X-Frame-Options: SAMEORIGIN');
+    expect(responseHeaders).not.toContain('X-Frame-Options: DENY');
   });
 
   it('shows and copies only the obfuscated email value', async () => {
