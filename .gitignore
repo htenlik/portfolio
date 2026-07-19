@@ -1,6 +1,10 @@
 .DS_Store
 .idea/
 .vscode/
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
 
 # wrangler files
 .wrangler

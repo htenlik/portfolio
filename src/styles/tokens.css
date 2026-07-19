@@ -1,0 +1,26 @@
+:root {
+  --font-ui: Tahoma, Verdana, Arial, sans-serif;
+  --desktop-blue: #3b78bb;
+  --title-blue: #0756bd;
+  --title-blue-light: #2f86e9;
+  --taskbar-blue: #1559bd;
+  --surface: #ece9d8;
+  --surface-light: #fff;
+  --surface-dark: #aca899;
+  --border-light: #fff;
+  --border-mid: #7f9db9;
+  --border-dark: #263c55;
+  --ink: #151515;
+  --ink-muted: #545454;
+  --focus: #ffb000;
+  --success: #188537;
+  --danger: #c52b20;
+  --title-gradient: linear-gradient(180deg, #2f86e9 0%, #0756bd 52%, #0646a1 100%);
+  --window-shadow: 4px 6px 18px rgb(0 24 64 / 35%);
+  --taskbar-height: 40px;
+  font-family: var(--font-ui);
+  color: var(--ink);
+  background: var(--desktop-blue);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}

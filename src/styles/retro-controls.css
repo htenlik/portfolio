@@ -1,0 +1,10 @@
+.retro-button {
+  min-height: 30px;
+  padding: .25rem .75rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 2px solid;
+  border-color: var(--border-light) var(--surface-dark) var(--surface-dark) var(--border-light);
+  cursor: pointer;
+}
+.retro-button:active { border-color: var(--surface-dark) var(--border-light) var(--border-light) var(--surface-dark); }
