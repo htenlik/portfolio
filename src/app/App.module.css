@@ -1,0 +1,33 @@
+.shell {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: var(--desktop-blue);
+}
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border-dark);
+  box-shadow: var(--window-shadow);
+}
+
+.placeholder h1,
+.placeholder p { margin: 0; }
+.placeholder p { margin-top: .25rem; color: var(--ink-muted); }
+
+.mark {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  aspect-ratio: 1;
+  color: white;
+  font-weight: 700;
+  background: var(--title-gradient);
+  border-radius: .5rem;
+}
