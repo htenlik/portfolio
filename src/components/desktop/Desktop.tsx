@@ -15,7 +15,7 @@ const entries: DesktopEntry[] = [
   { id: 'contact', label: 'Contact', icon: '/icons/contact.svg' },
 ];
 
-export function Desktop() {
+export function Desktop({ secretVisible = false }: { secretVisible?: boolean }) {
   const [selected, setSelected] = useState<string | null>(null);
   const mobile = useMediaQuery('(max-width: 640px), (pointer: coarse)');
   const { openWindow } = useWindowManager();
@@ -24,7 +24,7 @@ export function Desktop() {
     <div className={styles.desktop} onPointerDown={(event) => { if (event.target === event.currentTarget) setSelected(null); }}>
       <h1 className="sr-only">Hüseyin Tenlik — Software Engineer portfolio</h1>
       <div className={styles.grid} role="list" aria-label="Desktop shortcuts">
-        {entries.map((entry) => (
+        {[...entries, ...(secretVisible ? [{ id: 'secret' as const, label: 'secret.txt', icon: '/icons/secret.svg' }] : [])].map((entry) => (
           <button key={entry.id} type="button" role="listitem" className={`${styles.icon} ${selected === entry.id ? styles.selected : ''}`}
             onClick={() => { setSelected(entry.id); if (mobile) open(entry.id); }} onDoubleClick={() => !mobile && open(entry.id)}
             onKeyDown={(event) => { if (event.key === 'Enter') open(entry.id); }} aria-label={`${entry.label}, shortcut`}>
