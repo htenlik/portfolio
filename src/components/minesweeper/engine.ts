@@ -1,5 +1,11 @@
 export type GameStatus = 'ready' | 'playing' | 'won' | 'lost';
-export interface Cell { row: number; col: number; isMine: boolean; adjacent: number; isRevealed: boolean; isFlagged: boolean; isIncorrectFlag: boolean; isExploded: boolean }
+export type Difficulty = 'Beginner' | 'Intermediate' | 'Expert';
+export const difficulties: Record<Difficulty, { rows: number; cols: number; mines: number }> = {
+  Beginner: { rows: 9, cols: 9, mines: 10 },
+  Intermediate: { rows: 16, cols: 16, mines: 40 },
+  Expert: { rows: 16, cols: 30, mines: 99 },
+};
+export interface Cell { row: number; col: number; isMine: boolean; adjacent: number; isRevealed: boolean; isFlagged: boolean; isQuestion: boolean; isIncorrectFlag: boolean; isExploded: boolean }
 export interface GameState { rows: number; cols: number; mineCount: number; cells: Cell[]; status: GameStatus; started: boolean }
 export type RandomSource = () => number;
 
@@ -15,14 +21,13 @@ const neighbors = (state: Pick<GameState, 'rows' | 'cols'>, row: number, col: nu
 
 export function createGame(rows = 9, cols = 9, mineCount = 10): GameState {
   if (rows < 1 || cols < 1 || mineCount < 0 || mineCount >= rows * cols) throw new Error('Invalid Minesweeper dimensions');
-  return { rows, cols, mineCount, status: 'ready', started: false, cells: Array.from({ length: rows * cols }, (_, index) => ({ row: Math.floor(index / cols), col: index % cols, isMine: false, adjacent: 0, isRevealed: false, isFlagged: false, isIncorrectFlag: false, isExploded: false })) };
+  return { rows, cols, mineCount, status: 'ready', started: false, cells: Array.from({ length: rows * cols }, (_, index) => ({ row: Math.floor(index / cols), col: index % cols, isMine: false, adjacent: 0, isRevealed: false, isFlagged: false, isQuestion: false, isIncorrectFlag: false, isExploded: false })) };
 }
 
 export function placeMines(game: GameState, safeRow: number, safeCol: number, random: RandomSource = Math.random): GameState {
   const cells = game.cells.map((cell) => ({ ...cell, isMine: false, adjacent: 0 }));
-  const safe = new Set([indexOf(game, safeRow, safeCol), ...neighbors(game, safeRow, safeCol)]);
-  let candidates = cells.map((_, index) => index).filter((index) => !safe.has(index));
-  if (candidates.length < game.mineCount) candidates = cells.map((_, index) => index).filter((index) => index !== indexOf(game, safeRow, safeCol));
+  const safeIndex = indexOf(game, safeRow, safeCol);
+  const candidates = cells.map((_, index) => index).filter((index) => index !== safeIndex);
   for (let index = candidates.length - 1; index > 0; index -= 1) {
     const swap = Math.floor(Math.min(.999999999, Math.max(0, random())) * (index + 1));
     [candidates[index], candidates[swap]] = [candidates[swap]!, candidates[index]!];
@@ -89,8 +94,20 @@ export function toggleFlag(game: GameState, row: number, col: number): GameState
   if (!inBounds(game, row, col) || game.status === 'won' || game.status === 'lost') return game;
   const targetIndex = indexOf(game, row, col); const target = game.cells[targetIndex]!;
   if (target.isRevealed) return game;
-  const cells = game.cells.map((cell, index) => index === targetIndex ? { ...cell, isFlagged: !cell.isFlagged } : cell);
+  const cells = game.cells.map((cell, index) => index === targetIndex ? { ...cell, isFlagged: !cell.isFlagged, isQuestion: false } : cell);
   return { ...game, cells };
+}
+
+export function cycleMark(game: GameState, row: number, col: number, questionMarks = true): GameState {
+  if (!inBounds(game, row, col) || game.status === 'won' || game.status === 'lost') return game;
+  const targetIndex = indexOf(game, row, col); const target = game.cells[targetIndex]!;
+  if (target.isRevealed) return game;
+  const replacement = target.isFlagged
+    ? { isFlagged: false, isQuestion: questionMarks }
+    : target.isQuestion
+      ? { isFlagged: false, isQuestion: false }
+      : { isFlagged: true, isQuestion: false };
+  return { ...game, cells: game.cells.map((cell, index) => index === targetIndex ? { ...cell, ...replacement } : cell) };
 }
 
 export const flagsRemaining = (game: GameState) => game.mineCount - game.cells.filter((cell) => cell.isFlagged).length;

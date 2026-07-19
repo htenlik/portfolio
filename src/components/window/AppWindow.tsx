@@ -56,7 +56,7 @@ export function AppWindow({ window, children }: { window: WindowInstance; childr
   const safeHeight = Math.min(window.size.height, viewport.height - 36);
   const style = mobile || window.isMaximized ? undefined : { left: Math.max(0, Math.min(viewport.width - safeWidth, window.position.x)), top: Math.max(0, Math.min(viewport.height - 36 - safeHeight, window.position.y)), width: safeWidth, height: safeHeight, zIndex: window.zIndex };
   return (
-    <section className={`${styles.window} ${window.isMaximized ? styles.maximized : ''} ${manager.state.activeId === window.id ? styles.activeWindow : ''}`} style={style} onPointerDown={() => manager.focusWindow(window.id)} aria-label={window.title}>
+    <section className={`${styles.window} ${window.id === 'minesweeper' ? styles.compactWindow : ''} ${window.isMaximized ? styles.maximized : ''} ${manager.state.activeId === window.id ? styles.activeWindow : ''}`} style={style} onPointerDown={() => manager.focusWindow(window.id)} aria-label={window.title}>
       <div className={`${styles.titlebar} ${manager.state.activeId === window.id ? styles.active : ''}`} onDoubleClick={() => manager.toggleMaximize(window.id)} onPointerDown={startDrag} onPointerMove={move} onPointerUp={stop} onPointerCancel={stop} onMouseUp={stop}>
         <span><img src={window.icon} alt="" />{window.title}</span>
         <div className={styles.controls}>

@@ -23,7 +23,7 @@ The repository includes the original visual assets used by the application:
 - Start menu, safe “Shut Down” dialog, live local clock, and date tooltip
 - Shareable hashes for applications and project details, including `#about`, `#projects`, and `#project/tasinmaz-management-system`
 - Data-driven profile, experience, contact, and project case studies
-- Classic 9×9 Minesweeper with delayed mine placement, first-neighborhood safety, smiley-only reset, SVG seven-segment counters, flags, flood reveal, classic chording, timer, keyboard/touch controls, and deterministic engine tests
+- Minesweeper-XP adaptation with Beginner, Intermediate, and Expert boards; pixel counters and faces; flags and question marks; flood reveal; classic chording; Game/Help menus; timer; keyboard/touch controls; and deterministic engine tests
 - Persistent `secret.txt` unlock after the first Minesweeper victory
 - Embedded public resume with a short availability fallback, failed-image fallbacks, storage guards, and a React error boundary
 - Indexable metadata, canonical URL, Open Graph/Twitter cards, manifest, robots file, and sitemap
@@ -73,7 +73,9 @@ Hashes map directly to registry IDs without a routing dependency. Supported exam
 
 ### Minesweeper engine
 
-The engine in `src/components/minesweeper/engine.ts` is independent from React. Mines are placed only after the first reveal, excluding the first cell and its neighbors whenever board capacity allows. The engine owns adjacency calculation, recursive empty-region reveal, flags, loss disclosure, incorrect-flag marking, and win detection. A random-number source can be injected for deterministic tests. React owns only presentation, elapsed time, announcements, and the persistent win unlock.
+The engine in `src/components/minesweeper/engine.ts` is independent from React. Mines are placed only after the first reveal and exclude the first cell. The engine owns adjacency calculation, recursive empty-region reveal, flags, question marks, loss disclosure, incorrect-flag marking, chording, and win detection. A random-number source can be injected for deterministic tests. React owns presentation, elapsed time, menus, announcements, themes, scaling, and the persistent win unlock.
+
+The implementation and embedded pixel sprites are adapted from the MIT-licensed `AkshayKalose/Minesweeper-XP` project. See `THIRD_PARTY_NOTICES.md` for attribution and license terms.
 
 ## Editing portfolio content
 

@@ -26,16 +26,17 @@ export function WindowManagerProvider({ children }: { children: ReactNode }) {
     dispatch({ type: 'CLOSE', id });
     if (window.location.hash === `#${id}`) window.history.pushState(null, '', `${window.location.pathname}${window.location.search}`);
   }, []);
+  const resizeWindow = useCallback((id: WindowId, size: Size, viewport: ResizeViewport) => dispatch({ type: 'RESIZE', id, size, viewport }), []);
   const value = useMemo<WindowManagerValue>(() => ({
     state, openWindow,
     focusWindow: (id) => dispatch({ type: 'FOCUS', id }),
     moveWindow: (id, position) => dispatch({ type: 'MOVE', id, position }),
-    resizeWindow: (id, size, viewport) => dispatch({ type: 'RESIZE', id, size, viewport }),
+    resizeWindow,
     minimizeWindow: (id) => dispatch({ type: 'MINIMIZE', id }),
     restoreWindow: (id) => dispatch({ type: 'RESTORE', id }),
     toggleMaximize: (id) => dispatch({ type: 'TOGGLE_MAXIMIZE', id }),
     closeWindow,
-  }), [closeWindow, openWindow, state]);
+  }), [closeWindow, openWindow, resizeWindow, state]);
   return <WindowManagerContext.Provider value={value}>{children}</WindowManagerContext.Provider>;
 }
 

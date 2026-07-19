@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { chordCell, createGame, flagsRemaining, placeMines, revealCell, toggleFlag, type GameState } from './engine';
+import { chordCell, createGame, cycleMark, difficulties, flagsRemaining, placeMines, revealCell, toggleFlag, type GameState } from './engine';
 
 const zero = () => 0;
 const manualGame = (rows: number, cols: number, mineIndexes: number[]): GameState => {
@@ -15,10 +15,12 @@ const manualGame = (rows: number, cols: number, mineIndexes: number[]): GameStat
 describe('Minesweeper engine', () => {
   it('creates the requested dimensions', () => { const game = createGame(9, 9, 10); expect(game.cells).toHaveLength(81); expect(game.mineCount).toBe(10); });
   it('places exactly the requested mine count', () => { const game = placeMines(createGame(), 4, 4, zero); expect(game.cells.filter((cell) => cell.isMine)).toHaveLength(10); });
-  it('keeps the first cell and neighbors safe when possible', () => { const game = revealCell(createGame(), 4, 4, zero); expect(game.cells.filter((cell) => Math.abs(cell.row - 4) <= 1 && Math.abs(cell.col - 4) <= 1).every((cell) => !cell.isMine)).toBe(true); });
+  it('keeps the first opened cell safe', () => { const game = revealCell(createGame(), 4, 4, zero); expect(game.cells[4 * game.cols + 4]?.isMine).toBe(false); });
+  it('exposes the original beginner, intermediate, and expert configurations', () => { expect(difficulties).toEqual({ Beginner: { rows: 9, cols: 9, mines: 10 }, Intermediate: { rows: 16, cols: 16, mines: 40 }, Expert: { rows: 16, cols: 30, mines: 99 } }); });
   it('calculates adjacent mine counts', () => { const game = placeMines(createGame(3, 3, 1), 0, 0, zero); const mine = game.cells.find((cell) => cell.isMine)!; game.cells.filter((cell) => Math.abs(cell.row - mine.row) <= 1 && Math.abs(cell.col - mine.col) <= 1 && !cell.isMine).forEach((cell) => expect(cell.adjacent).toBe(1)); });
   it('flood reveals connected empty cells and wins', () => { const game = { ...createGame(3, 3, 0), started: true, status: 'playing' as const }; const revealed = revealCell(game, 1, 1); expect(revealed.cells.every((cell) => cell.isRevealed)).toBe(true); expect(revealed.status).toBe('won'); });
   it('toggles flags', () => { const game = createGame(); const flagged = toggleFlag(game, 0, 0); expect(flagged.cells[0]?.isFlagged).toBe(true); expect(toggleFlag(flagged, 0, 0).cells[0]?.isFlagged).toBe(false); });
+  it('cycles cover, flag, question, and cover when marks are enabled', () => { const flagged = cycleMark(createGame(), 0, 0); const question = cycleMark(flagged, 0, 0); const covered = cycleMark(question, 0, 0); expect(flagged.cells[0]).toMatchObject({ isFlagged: true, isQuestion: false }); expect(question.cells[0]).toMatchObject({ isFlagged: false, isQuestion: true }); expect(covered.cells[0]).toMatchObject({ isFlagged: false, isQuestion: false }); });
   it('does not reveal a flagged cell or start the game', () => { const flagged = toggleFlag(createGame(), 0, 0); const revealed = revealCell(flagged, 0, 0, zero); expect(revealed.cells[0]?.isRevealed).toBe(false); expect(revealed.started).toBe(false); expect(revealed.status).toBe('ready'); });
   it('loses, reveals mines, identifies the explosion, and marks incorrect flags', () => { let game = manualGame(2, 2, [0]); game = toggleFlag(game, 1, 1); const lost = revealCell(game, 0, 0); expect(lost.status).toBe('lost'); expect(lost.cells[0]?.isRevealed).toBe(true); expect(lost.cells[0]?.isExploded).toBe(true); expect(lost.cells[3]?.isIncorrectFlag).toBe(true); });
   it('keeps correctly flagged mines flagged after loss', () => { let game = manualGame(1, 3, [0, 2]); game = toggleFlag(game, 0, 0); const lost = revealCell(game, 0, 2); expect(lost.cells[0]?.isFlagged).toBe(true); expect(lost.cells[0]?.isIncorrectFlag).toBe(false); expect(lost.cells[2]?.isExploded).toBe(true); });
