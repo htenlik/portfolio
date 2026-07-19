@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { App } from '../app/App';
 import { Desktop } from '../components/desktop/Desktop';
@@ -19,6 +19,30 @@ describe('portfolio UI behavior', () => {
     render(<WindowManagerProvider><Desktop /><StateProbe /></WindowManagerProvider>);
     await userEvent.dblClick(screen.getByRole('button', { name: /my computer, shortcut/i }));
     expect(screen.getByTestId('state')).toHaveTextContent('"about"');
+  });
+
+  it('selects and moves a desktop shortcut onto the classic grid', async () => {
+    render(<WindowManagerProvider><Desktop /></WindowManagerProvider>);
+    const shortcut = screen.getByRole('button', { name: /my computer, shortcut/i });
+    expect(shortcut).toHaveAttribute('aria-selected', 'false');
+    fireEvent.pointerDown(shortcut, { button: 0, pointerId: 1, clientX: 20, clientY: 20 });
+    fireEvent.pointerMove(shortcut, { pointerId: 1, clientX: 130, clientY: 105 });
+    fireEvent.pointerUp(shortcut, { pointerId: 1, clientX: 130, clientY: 105 });
+    expect(shortcut).toHaveAttribute('aria-selected', 'true');
+    await waitFor(() => {
+      const stored = JSON.parse(localStorage.getItem('htenlikos-desktop-layout-v1') ?? '{}') as Record<string, { x: number; y: number }>;
+      expect(stored.about).toEqual({ x: 97, y: 94 });
+    });
+  });
+
+  it('provides shortcut and desktop context menus', () => {
+    const { container } = render(<WindowManagerProvider><Desktop /></WindowManagerProvider>);
+    fireEvent.contextMenu(screen.getByRole('button', { name: /my computer, shortcut/i }), { clientX: 30, clientY: 30 });
+    expect(screen.getByRole('menu', { name: 'My Computer context menu' })).toBeInTheDocument();
+    expect(screen.getByRole('menuitem', { name: 'Properties' })).toBeInTheDocument();
+    fireEvent.contextMenu(container.querySelector('[role="list"]')!, { clientX: 300, clientY: 200 });
+    expect(screen.getByRole('menu', { name: 'Desktop context menu' })).toBeInTheDocument();
+    expect(screen.getByRole('menuitem', { name: 'Arrange Icons' })).toBeInTheDocument();
   });
 
   it('opens and closes the Start menu', async () => {
