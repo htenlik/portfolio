@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createGame, flagsRemaining, placeMines, revealCell, toggleFlag, type GameState } from './engine';
+import { chordCell, createGame, flagsRemaining, placeMines, revealCell, toggleFlag, type GameState } from './engine';
 
 const zero = () => 0;
 const manualGame = (rows: number, cols: number, mineIndexes: number[]): GameState => {
@@ -26,4 +26,7 @@ describe('Minesweeper engine', () => {
   it('moves from ready to playing on first reveal', () => { const game = revealCell(createGame(), 4, 4, zero); expect(game.started).toBe(true); expect(game.status).toBe('playing'); });
   it('allows more flags than mines and reports a negative counter', () => { let game = createGame(2, 2, 1); game = toggleFlag(game, 0, 0); game = toggleFlag(game, 0, 1); expect(flagsRemaining(game)).toBe(-1); });
   it('locks reveal and flag input after completion', () => { const won = revealCell(manualGame(1, 2, [1]), 0, 0); expect(toggleFlag(won, 0, 1)).toBe(won); expect(revealCell(won, 0, 1)).toBe(won); const lost = revealCell(manualGame(1, 2, [1]), 0, 1); expect(toggleFlag(lost, 0, 0)).toBe(lost); expect(revealCell(lost, 0, 0)).toBe(lost); });
+  it('chords around an open number when the adjacent flag count matches', () => { let game = manualGame(3, 3, [0]); game = revealCell(game, 1, 1); game = toggleFlag(game, 0, 0); const chorded = chordCell(game, 1, 1); expect(chorded.status).toBe('won'); expect(chorded.cells.filter((cell) => !cell.isMine).every((cell) => cell.isRevealed)).toBe(true); });
+  it('does not chord when the adjacent flag count does not match', () => { const game = revealCell(manualGame(3, 3, [0]), 1, 1); expect(chordCell(game, 1, 1)).toBe(game); });
+  it('loses on a chord with an incorrectly placed flag', () => { let game = revealCell(manualGame(3, 3, [0]), 1, 1); game = toggleFlag(game, 0, 1); const chorded = chordCell(game, 1, 1); expect(chorded.status).toBe('lost'); expect(chorded.cells[0]).toMatchObject({ isMine: true, isExploded: true }); expect(chorded.cells[1]).toMatchObject({ isIncorrectFlag: true }); });
 });

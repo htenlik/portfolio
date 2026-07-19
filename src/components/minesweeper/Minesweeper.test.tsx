@@ -70,6 +70,18 @@ describe('classic Minesweeper component', () => {
     expect(cells()[1]).not.toHaveAccessibleName(/hidden/);
   });
 
+  it('supports keyboard chording on an open numbered cell', () => {
+    render(<Minesweeper onWin={() => undefined} random={zero} />);
+    fireEvent.click(cells()[0]!);
+    const seeded = revealCell(createGame(), 0, 0, zero);
+    const numbered = seeded.cells.find((cell) => cell.isRevealed && cell.adjacent > 0)!;
+    const adjacentMines = seeded.cells.filter((cell) => cell.isMine && Math.abs(cell.row - numbered.row) <= 1 && Math.abs(cell.col - numbered.col) <= 1);
+    adjacentMines.forEach((cell) => fireEvent.contextMenu(cells()[cell.row * seeded.cols + cell.col]!));
+    const hiddenBefore = cells().filter((cell) => /hidden/.test(cell.getAttribute('aria-label') ?? '')).length;
+    fireEvent.keyDown(cells()[numbered.row * seeded.cols + numbered.col]!, { key: 'c' });
+    expect(cells().filter((cell) => /hidden/.test(cell.getAttribute('aria-label') ?? '')).length).toBeLessThan(hiddenBefore);
+  });
+
   it('supports compact flag mode without starting the timer', () => {
     render(<Minesweeper onWin={() => undefined} random={zero} />);
     const mode = screen.getByText('Flag mode').closest('button')!;
@@ -121,6 +133,6 @@ describe('classic Minesweeper component', () => {
   it('shows a stable negative mine counter when flags exceed mines', () => {
     render(<Minesweeper onWin={() => undefined} random={zero} />);
     cells().slice(0, 11).forEach((cell) => fireEvent.contextMenu(cell));
-    expect(screen.getByLabelText('-1 mines remaining')).toHaveTextContent('-01');
+    expect(screen.getByLabelText('-1 mines remaining')).toHaveAttribute('data-value', '-01');
   });
 });
