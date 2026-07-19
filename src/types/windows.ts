@@ -13,6 +13,8 @@ export type WindowId =
 
 export interface Point { x: number; y: number }
 export interface Size { width: number; height: number }
+export type ResizeDirection = 'right' | 'bottom' | 'bottom-right';
+export interface ResizeViewport extends Size { taskbarHeight: number }
 
 export interface WindowDefinition {
   id: WindowId;

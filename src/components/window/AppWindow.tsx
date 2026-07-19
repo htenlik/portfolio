@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef, type PointerEvent, type ReactNode } from 'reac
 import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { useViewportSize } from '../../hooks/useViewportSize';
 import { useWindowManager } from '../../state/window-manager/WindowManagerContext';
-import type { WindowInstance } from '../../types/windows';
+import type { ResizeDirection, WindowInstance } from '../../types/windows';
 import styles from './AppWindow.module.css';
 
 export function AppWindow({ window, children }: { window: WindowInstance; children: ReactNode }) {
@@ -10,6 +10,7 @@ export function AppWindow({ window, children }: { window: WindowInstance; childr
   const mobile = useMediaQuery('(max-width: 640px)');
   const viewport = useViewportSize();
   const drag = useRef<{ pointerX: number; pointerY: number; x: number; y: number } | null>(null);
+  const resize = useRef<{ pointerX: number; pointerY: number; width: number; height: number; direction: ResizeDirection } | null>(null);
   const content = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     if (window.isOpen) content.current?.scrollTo({ top: 0, left: 0 });
@@ -28,6 +29,26 @@ export function AppWindow({ window, children }: { window: WindowInstance; childr
     manager.moveWindow(window.id, { x, y });
   };
   const stop = () => { drag.current = null; };
+  const startResize = (event: PointerEvent<HTMLDivElement>) => {
+    if (mobile || window.isMaximized) return;
+    event.preventDefault();
+    event.stopPropagation();
+    const direction = event.currentTarget.dataset.direction as ResizeDirection;
+    resize.current = { pointerX: event.clientX, pointerY: event.clientY, width: window.size.width, height: window.size.height, direction };
+    event.currentTarget.setPointerCapture(event.pointerId);
+    document.body.style.userSelect = 'none';
+    manager.focusWindow(window.id);
+  };
+  const resizeMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (!resize.current) return;
+    const horizontal = resize.current.direction !== 'bottom';
+    const vertical = resize.current.direction !== 'right';
+    manager.resizeWindow(window.id, {
+      width: horizontal ? resize.current.width + event.clientX - resize.current.pointerX : window.size.width,
+      height: vertical ? resize.current.height + event.clientY - resize.current.pointerY : window.size.height,
+    }, { width: viewport.width, height: viewport.height, taskbarHeight: 36 });
+  };
+  const stopResize = () => { resize.current = null; document.body.style.userSelect = ''; };
   const safeWidth = Math.min(window.size.width, viewport.width);
   const safeHeight = Math.min(window.size.height, viewport.height - 40);
   const style = mobile || window.isMaximized ? undefined : { left: Math.max(-safeWidth + 90, Math.min(viewport.width - 90, window.position.x)), top: Math.max(0, Math.min(viewport.height - 78, window.position.y)), width: safeWidth, height: safeHeight, zIndex: window.zIndex };
@@ -43,6 +64,11 @@ export function AppWindow({ window, children }: { window: WindowInstance; childr
       </div>
       <div ref={content} className={styles.content} data-window-content={window.id}>{children}</div>
       <div className={styles.status}><span>Ready</span><i aria-hidden="true" /></div>
+      {!mobile && !window.isMaximized && <>
+        <div className={`${styles.resizeHandle} ${styles.resizeRight}`} data-direction="right" aria-hidden="true" onPointerDown={startResize} onPointerMove={resizeMove} onPointerUp={stopResize} onPointerCancel={stopResize} />
+        <div className={`${styles.resizeHandle} ${styles.resizeBottom}`} data-direction="bottom" aria-hidden="true" onPointerDown={startResize} onPointerMove={resizeMove} onPointerUp={stopResize} onPointerCancel={stopResize} />
+        <div className={`${styles.resizeHandle} ${styles.resizeCorner}`} data-direction="bottom-right" aria-label={`Resize ${window.title}`} role="separator" aria-orientation="vertical" onPointerDown={startResize} onPointerMove={resizeMove} onPointerUp={stopResize} onPointerCancel={stopResize} />
+      </>}
     </section>
   );
 }

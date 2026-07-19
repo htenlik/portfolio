@@ -20,4 +20,8 @@
 .status span { flex: 1; padding: 2px 5px; border: 1px solid; border-color: #aca899 #fff #fff #aca899; }
 .status i { position: relative; width: 16px; border: 1px solid; border-color: #aca899 #fff #fff #aca899; }
 .status i::after { content: ''; position: absolute; right: 1px; bottom: 1px; width: 10px; height: 10px; background: repeating-linear-gradient(135deg, transparent 0 2px, #aca899 2px 3px); }
+.resizeHandle { position: absolute; z-index: 3; touch-action: none; user-select: none; }
+.resizeRight { top: 29px; right: 0; bottom: 14px; width: 5px; cursor: ew-resize; }
+.resizeBottom { right: 14px; bottom: 0; left: 0; height: 5px; cursor: ns-resize; }
+.resizeCorner { right: 0; bottom: 0; width: 16px; height: 16px; cursor: nwse-resize; opacity: 0; }
 @media (max-width: 640px) { .window, .maximized { inset: 0 0 var(--taskbar-height) !important; width: auto !important; height: auto !important; min-width: 0; min-height: 0; border-radius: 0; } .titlebar { flex-basis: 36px; font-size: 11px; } .controls button { width: 31px; height: 29px; } .close span::before, .close span::after { top: 13px; left: 7px; width: 15px; } .maximize span::before { inset: 6px; } .minimize span::before { left: 7px; bottom: 7px; width: 13px; }.restore span::before { top: 7px; left: 10px; }.restore span::after { top: 10px; left: 7px; } }
