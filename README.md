@@ -23,7 +23,7 @@ The repository includes the original visual assets used by the application:
 - Start menu, safe “Shut Down” dialog, live local clock, and date tooltip
 - Shareable hashes for applications and project details, including `#about`, `#projects`, and `#project/tasinmaz-management-system`
 - Data-driven profile, experience, contact, and project case studies
-- Classic 9×9 Minesweeper with delayed mine placement, first-neighborhood safety, smiley-only reset, seven-segment counters, flags, flood reveal, timer, keyboard/touch controls, and deterministic engine tests
+- Classic 9×9 Minesweeper with delayed mine placement, first-neighborhood safety, smiley-only reset, SVG seven-segment counters, flags, flood reveal, classic chording, timer, keyboard/touch controls, and deterministic engine tests
 - Persistent `secret.txt` unlock after the first Minesweeper victory
 - Embedded public resume with a short availability fallback, failed-image fallbacks, storage guards, and a React error boundary
 - Indexable metadata, canonical URL, Open Graph/Twitter cards, manifest, robots file, and sitemap
@@ -80,7 +80,9 @@ The engine in `src/components/minesweeper/engine.ts` is independent from React. 
 - Profile, summary, education, and technology groups: `src/content/profile.ts`
 - Work experience: `src/content/experience.ts`
 - Project facts, links, media, and case-study sections: `src/content/projects.ts`
-- Public contact links, obfuscated email, and optional LinkedIn profile: `src/content/contact.ts`
+- Public contact links, obfuscated email actions, and optional LinkedIn profile: `src/content/contact.ts`
+- Experience and training timeline: `src/content/experience.ts`
+- Project media arrays accept multiple gallery images per project: `src/content/projects.ts`
 - Resume availability: `src/content/resume.ts`
 
 Content files are intentionally separate from components. Keep claims conservative and public. Never add internal endpoints, private company code, customer data, tokens, private screenshots, or inferred contact details.

@@ -55,15 +55,15 @@ describe('portfolio UI behavior', () => {
     const { container } = render(<ResumeApp expectedAvailable />);
     expect(screen.getByRole('link', { name: 'Open PDF' })).toHaveAttribute('href', resumeFile);
     expect(screen.getByRole('link', { name: 'Download PDF' })).toHaveAttribute('download', resumeDownloadName);
-    expect(container.querySelector('object')).toHaveAttribute('data', '/huseyin_tenlik_cv.pdf');
+    expect(container.querySelector('iframe')).toHaveAttribute('src', '/huseyin_tenlik_cv.pdf#view=FitH&toolbar=1');
   });
 
-  it('shows only the obfuscated email and copies the valid address', async () => {
+  it('shows and copies only the obfuscated email value', async () => {
     const writeText = vi.fn().mockResolvedValue(undefined);
     Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
     render(<ContactApp />);
     expect(screen.getByText('h[dot]tenlik7677[at]gmail[dot]com')).toBeInTheDocument();
-    expect(document.body).not.toHaveTextContent(contact.email.address);
+    expect(screen.queryByText('h.tenlik7677@gmail.com')).not.toBeInTheDocument();
     await userEvent.click(screen.getAllByRole('button', { name: 'Copy' })[0]!);
     expect(writeText).toHaveBeenCalledWith(contact.email.address);
     expect(screen.getByRole('status')).toHaveTextContent('Email address copied to clipboard.');
@@ -71,8 +71,19 @@ describe('portfolio UI behavior', () => {
 
   it('renders LinkedIn only when it is configured', () => {
     const { rerender } = render(<ContactApp details={{ email: contact.email, links: contact.links }} />);
-    expect(screen.queryByText('LinkedIn profile')).not.toBeInTheDocument();
+    expect(screen.queryByText(contact.linkedin!)).not.toBeInTheDocument();
     rerender(<ContactApp />);
-    expect(screen.getByText('LinkedIn profile')).toHaveAttribute('href', contact.linkedin);
+    expect(screen.getByText(contact.linkedin!)).toHaveAttribute('href', contact.linkedin);
+  });
+
+  it('copies GitHub and LinkedIn profile URLs', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
+    render(<ContactApp />);
+    const copyButtons = screen.getAllByRole('button', { name: 'Copy' });
+    await userEvent.click(copyButtons[1]!);
+    await userEvent.click(copyButtons[2]!);
+    expect(writeText).toHaveBeenNthCalledWith(1, 'https://github.com/htenlik');
+    expect(writeText).toHaveBeenNthCalledWith(2, contact.linkedin);
   });
 });

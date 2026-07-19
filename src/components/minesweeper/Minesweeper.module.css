@@ -1,11 +1,12 @@
 .game { display: grid; min-height: 100%; place-items: center; padding: 8px; background: #c0c0c0; }
-.gameFrame { width: max-content; max-width: 100%; padding: 7px; background: #c0c0c0; border: 3px solid; border-color: #fff #777 #777 #fff; box-shadow: inset 1px 1px #dfdfdf, inset -1px -1px #000; }
-.panel { display: flex; align-items: center; justify-content: space-between; min-height: 58px; padding: 6px 7px; margin-bottom: 8px; border: 3px solid; border-color: #777 #fff #fff #777; box-shadow: inset 1px 1px #000; }
-.counter { display: flex; width: 67px; height: 37px; align-items: center; justify-content: center; padding: 2px; color: #f22; font: 700 27px/1 'Courier New', monospace; letter-spacing: -2px; background: #210000; border: 1px solid #111; text-shadow: 0 0 3px #e00000; }
-.counter i { display: inline-block; width: 20px; font-style: normal; text-align: center; }
-.faceButton { display: grid; width: 38px; height: 38px; place-items: center; padding: 3px; background: #c0c0c0; border: 3px solid; border-color: #fff #777 #777 #fff; box-shadow: 1px 1px #000; cursor: pointer; }
+.gameFrame { width: max-content; max-width: 100%; padding: 6px; background: #c0c0c0; border: 3px solid; border-color: #fff #787878 #787878 #fff; box-shadow: inset 1px 1px #dfdfdf, inset -1px -1px #000, 1px 1px #404040; }
+.panel { display: flex; align-items: center; justify-content: space-between; min-height: 55px; padding: 5px 6px; margin-bottom: 7px; border: 3px solid; border-color: #787878 #fff #fff #787878; box-shadow: inset 1px 1px #000; }
+.counter { display: flex; width: 66px; height: 38px; align-items: stretch; justify-content: center; gap: 1px; box-sizing: border-box; padding: 2px 3px; background: #160000; border: 1px solid #080808; box-shadow: inset 0 0 0 1px #350000; }
+.digit { width: 18px; height: 32px; filter: drop-shadow(0 0 2px #9e0000); }
+.segmentOn { fill: #ff1b12; }.segmentOff { fill: #390503; }
+.faceButton { display: grid; width: 36px; height: 36px; place-items: center; padding: 3px; background: #c0c0c0; border: 3px solid; border-color: #fff #777 #777 #fff; box-shadow: 1px 1px #000; cursor: pointer; }
 .faceButton:active { padding: 5px 1px 1px 5px; border-color: #777 #fff #fff #777; box-shadow: inset 1px 1px #000; }
-.faceDrawing { position: relative; display: block; width: 25px; height: 25px; background: #ffeb3b; border: 2px solid #111; border-radius: 50%; }
+.faceDrawing { position: relative; display: block; width: 23px; height: 23px; background: #ffeb25; border: 2px solid #111; border-radius: 50%; box-shadow: inset 2px 2px #fff36b, inset -2px -2px #c4a800; }
 .faceDrawing i { position: absolute; top: 6px; width: 3px; height: 5px; background: #111; }.leftEye { left: 5px; }.rightEye { right: 5px; }
 .faceDrawing b { position: absolute; right: 5px; bottom: 4px; left: 5px; height: 6px; border-bottom: 2px solid #111; border-radius: 0 0 50% 50%; }
 .surprised b { left: 8px; right: 8px; height: 5px; border: 2px solid #111; border-radius: 50%; }
@@ -14,13 +15,13 @@
 .touchTools { display: none; margin: -2px 0 6px; text-align: right; }.touchTools button { min-height: 30px; padding: 3px 7px; font-size: 11px; background: #c0c0c0; border: 2px solid; border-color: #fff #777 #777 #fff; }.touchTools .enabled { border-color: #777 #fff #fff #777; background: #e0d493; }
 .boardFrame { padding: 3px; border: 3px solid; border-color: #777 #fff #fff #777; box-shadow: inset 1px 1px #000; }
 .board { --cell-size: min(28px, calc((100vw - 58px) / var(--columns))); display: grid; grid-template-columns: repeat(var(--columns), var(--cell-size)); background: #808080; }
-.cell { position: relative; display: grid; width: var(--cell-size); height: var(--cell-size); min-width: 0; min-height: 0; place-items: center; padding: 0; font: 700 16px/1 Arial, sans-serif; background: #c0c0c0; border: 3px solid; border-color: #fff #777 #777 #fff; cursor: default; }
+.cell { position: relative; display: grid; width: var(--cell-size); height: var(--cell-size); min-width: 0; min-height: 0; place-items: center; padding: 0; font: 700 17px/1 'Arial Narrow', Arial, sans-serif; background: #c0c0c0; border: 3px solid; border-color: #fff #777 #777 #fff; cursor: default; }
 .cell:active:not(.revealed) { border: 1px solid #777; }
 .cell.revealed { background: #c0c0c0; border: 1px solid #808080; }
 .cell.exploded { background: #f22; }.cell.incorrect { background: #c0c0c0; }
 .n1 { color: #0000f5; }.n2 { color: #067b05; }.n3 { color: #f40000; }.n4 { color: #00007b; }.n5 { color: #7b0000; }.n6 { color: #007b7b; }.n7 { color: #111; }.n8 { color: #777; }
-.flag { position: relative; display: block; width: 16px; height: 18px; }.flag::before { content: ''; position: absolute; top: 1px; left: 3px; border-top: 5px solid transparent; border-right: 10px solid #e00000; border-bottom: 5px solid transparent; transform: rotate(180deg); }.flag i { position: absolute; top: 2px; left: 4px; width: 2px; height: 12px; background: #111; }.flag b { position: absolute; bottom: 1px; left: 1px; width: 12px; height: 3px; background: #111; }
-.mine { position: relative; display: block; width: 16px; height: 16px; border-radius: 50%; background: #111; }.mine::before, .mine::after { content: ''; position: absolute; top: 7px; left: -3px; width: 22px; height: 2px; background: #111; }.mine::after { transform: rotate(90deg); }.mine i { position: absolute; z-index: 1; top: 3px; left: 3px; width: 4px; height: 4px; background: #fff; }
+.flag { position: relative; display: block; width: 16px; height: 18px; }.flag::before { content: ''; position: absolute; top: 1px; left: 3px; width: 10px; height: 8px; background: #e40000; border: 1px solid #7d0000; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 70%); }.flag i { position: absolute; top: 2px; left: 3px; width: 2px; height: 13px; background: #111; }.flag b { position: absolute; bottom: 1px; left: 1px; width: 13px; height: 3px; background: #111; box-shadow: 2px -2px #111; }
+.mine { position: relative; display: block; width: 15px; height: 15px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff 0 8%, #555 9% 18%, #080808 19%); }.mine::before, .mine::after { content: ''; position: absolute; top: 6px; left: -4px; width: 23px; height: 3px; background: #080808; }.mine::after { transform: rotate(90deg); }.mine i::before, .mine i::after { content: ''; position: absolute; top: 6px; left: -3px; width: 21px; height: 2px; background: #080808; transform: rotate(45deg); }.mine i::after { transform: rotate(-45deg); }
 .incorrectMark { position: relative; display: block; }.incorrectMark em::before, .incorrectMark em::after { content: ''; position: absolute; z-index: 2; top: 8px; left: -2px; width: 21px; height: 2px; background: #e00000; transform: rotate(45deg); }.incorrectMark em::after { transform: rotate(-45deg); }
 @media (pointer: coarse) { .touchTools { display: block; } }
 @media (max-width: 640px) { .game { align-content: center; padding: 4px; }.gameFrame { padding: 6px; }.board { --cell-size: min(34px, calc((100vw - 44px) / var(--columns))); }.cell { font-size: 17px; }.faceButton { width: 42px; height: 42px; }.touchTools button { min-height: 38px; } }

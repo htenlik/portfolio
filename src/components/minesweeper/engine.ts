@@ -32,26 +32,57 @@ export function placeMines(game: GameState, safeRow: number, safeCol: number, ra
   return { ...game, cells, status: 'playing', started: true };
 }
 
+const loseGame = (game: GameState, explodedIndex: number): GameState => {
+  const cells = game.cells.map((cell, index) => ({
+    ...cell,
+    isRevealed: cell.isMine ? true : cell.isRevealed,
+    isIncorrectFlag: cell.isFlagged && !cell.isMine,
+    isExploded: index === explodedIndex,
+  }));
+  return { ...game, cells, status: 'lost' };
+};
+
+const revealSafeCells = (game: GameState, startIndexes: readonly number[]): GameState => {
+  const cells = game.cells.map((cell) => ({ ...cell }));
+  const queue = [...startIndexes];
+  const visited = new Set<number>();
+  while (queue.length) {
+    const currentIndex = queue.shift()!;
+    if (visited.has(currentIndex)) continue;
+    visited.add(currentIndex);
+    const cell = cells[currentIndex]!;
+    if (cell.isFlagged || cell.isMine) continue;
+    cell.isRevealed = true;
+    if (cell.adjacent === 0) neighbors(game, cell.row, cell.col).forEach((neighbor) => {
+      if (!visited.has(neighbor)) queue.push(neighbor);
+    });
+  }
+  const won = cells.every((cell) => cell.isMine || cell.isRevealed);
+  return { ...game, cells, status: won ? 'won' : 'playing' };
+};
+
 export function revealCell(game: GameState, row: number, col: number, random: RandomSource = Math.random): GameState {
   if (!inBounds(game, row, col) || game.status === 'won' || game.status === 'lost') return game;
   const originalTarget = game.cells[indexOf(game, row, col)]!;
   if (originalTarget.isFlagged || originalTarget.isRevealed) return game;
   const next = game.started ? game : placeMines(game, row, col, random);
   const targetIndex = indexOf(next, row, col); const target = next.cells[targetIndex]!;
-  const cells = next.cells.map((cell) => ({ ...cell }));
-  if (target.isMine) {
-    cells.forEach((cell) => { if (cell.isMine) cell.isRevealed = true; if (cell.isFlagged && !cell.isMine) cell.isIncorrectFlag = true; });
-    cells[targetIndex]!.isExploded = true;
-    return { ...next, cells, status: 'lost' };
-  }
-  const queue = [targetIndex]; const visited = new Set<number>();
-  while (queue.length) {
-    const currentIndex = queue.shift()!; if (visited.has(currentIndex)) continue; visited.add(currentIndex);
-    const cell = cells[currentIndex]!; if (cell.isFlagged || cell.isMine) continue; cell.isRevealed = true;
-    if (cell.adjacent === 0) neighbors(next, cell.row, cell.col).forEach((neighbor) => { if (!visited.has(neighbor)) queue.push(neighbor); });
-  }
-  const won = cells.every((cell) => cell.isMine || cell.isRevealed);
-  return { ...next, cells, status: won ? 'won' : 'playing' };
+  return target.isMine ? loseGame(next, targetIndex) : revealSafeCells(next, [targetIndex]);
+}
+
+/**
+ * Classic chording behavior, independently implemented after reviewing the
+ * MIT-licensed AkshayKalose/Minesweeper-XP interaction model.
+ */
+export function chordCell(game: GameState, row: number, col: number): GameState {
+  if (!inBounds(game, row, col) || game.status !== 'playing') return game;
+  const target = game.cells[indexOf(game, row, col)]!;
+  if (!target.isRevealed || target.adjacent < 1) return game;
+  const nearby = neighbors(game, row, col);
+  if (nearby.filter((index) => game.cells[index]!.isFlagged).length !== target.adjacent) return game;
+  const covered = nearby.filter((index) => !game.cells[index]!.isRevealed && !game.cells[index]!.isFlagged);
+  const mine = covered.find((index) => game.cells[index]!.isMine);
+  return mine === undefined ? revealSafeCells(game, covered) : loseGame(game, mine);
 }
 
 export function toggleFlag(game: GameState, row: number, col: number): GameState {

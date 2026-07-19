@@ -1,25 +1,84 @@
-export interface ExperienceEntry { organization: string; role: string; year?: string; context?: string; contributions: readonly string[]; technologies?: readonly string[]; note?: string }
+export interface ExperienceEntry {
+  id: string;
+  organization: string;
+  role: string;
+  dates: string;
+  context?: string;
+  contributions: readonly string[];
+  technologies?: readonly string[];
+}
 
 export const experience: readonly ExperienceEntry[] = [
   {
-    organization: 'Jotform', role: 'Backend Developer Intern', year: '2026',
-    context: 'A three-person internship team building analytics capabilities for electronic signing workflows.',
+    id: 'odakgis',
+    organization: 'OdakGIS',
+    role: 'Part-time Full Stack Web Developer',
+    dates: 'Apr. 2025 – Oct. 2025',
+    context: 'Worked on government-supported web-based geographic information system applications.',
     contributions: [
-      'Implemented backend analytics behavior across session and event flows.', 'Added date, country, and status filters before aggregation.',
-      'Helped establish consistent session semantics across analytics endpoints.', 'Added engagement metrics such as unique users, total sessions, interaction rate, bounce rate, and read rate.',
-      'Developed a field-friction model using a 0–100 score, confidence, and explainable signals.', 'Converted technical AI-generated metrics into clearer user-facing insights and health assessments.',
-      'Added useful enrichment such as document titles and signer email handling where available.', 'Worked with the team to prepare and present the project in the internship demo.',
+      'Developed frontend modules, REST APIs, and database schemas with Angular, .NET, PostgreSQL, OpenLayers, and GeoServer.',
+      'Contributed to data management, debugging, and workflow improvements across GIS applications.',
+      'Implemented map and image upload, visualization, and location-oriented interface features.',
+      'Owned modules from implementation through deployment support.',
     ],
-    technologies: ['PHP', 'Backend APIs', 'Analytics', 'Data aggregation', 'AI-assisted reporting'],
-    note: 'Private source code, internal endpoints, customer information, and company-only visuals are intentionally not shown.',
+    technologies: ['Angular', '.NET', 'PostgreSQL', 'OpenLayers', 'GeoServer', 'GIS'],
   },
   {
-    organization: 'OdakGIS', role: 'Full Stack Developer',
-    contributions: ['Worked on full-stack web applications.', 'Built and maintained application functionality using .NET and Angular.', 'Worked with geospatial interfaces and GIS technologies.', 'Used tools such as OpenLayers and GeoServer.', 'Contributed to production-oriented and government-supported application workflows.'],
-    technologies: ['C#', '.NET', 'Angular', 'OpenLayers', 'GeoServer', 'GIS'],
+    id: 'tubitak-dream',
+    organization: 'TÜBİTAK 1001 ARDEB & Hacettepe DREAM Project',
+    role: 'Scholarship Holder · Supervisor: Prof. Dr. Ayça Kolukısa Tarhan',
+    dates: 'Oct. 2025 – Jun. 2026',
+    context: 'Research work at Hacettepe University focused on domain-specific modeling and open-source software quality assessment.',
+    contributions: [
+      'Owned the primary web application across a React frontend, Spring Boot backend, PostgreSQL database, and Docker development environment.',
+      'Developed backend services for DSL-based modeling infrastructure and persistence.',
+      'Implemented consistency checks and model-integrity controls for research workflows.',
+    ],
+    technologies: ['React', 'Spring Boot', 'PostgreSQL', 'Docker', 'DSL modeling'],
   },
   {
-    organization: 'TÜBİTAK', role: 'Research Scholarship Holder',
-    contributions: ['Contributed to software and research infrastructure in a funded research context.', 'Worked with technical problem solving and implementation-oriented research tasks.'],
+    id: 'jotform',
+    organization: 'Jotform',
+    role: 'Backend Developer Intern',
+    dates: 'Jun. 2026 – Aug. 2026',
+    context: 'Worked in a three-person team on a PHP-based Sign Analytics and AI Insights product.',
+    contributions: [
+      'Built REST APIs and aggregation pipelines for filters, field analytics, event activity, daily signing and engagement trends, document metadata, and signer sessions.',
+      'Developed field-friction scoring and AI-assisted insight and health assessments.',
+      'Documented APIs with OpenAPI and used privacy-aware metadata handling.',
+      'Added contract tests and helped prepare the product demo.',
+    ],
+    technologies: ['PHP', 'REST APIs', 'Analytics', 'OpenAPI', 'Contract testing'],
+  },
+  {
+    id: 'vakifbank',
+    organization: 'VakıfBank',
+    role: 'Backend Developer Intern',
+    dates: 'Aug. 2026 – Present',
+    contributions: [],
+  },
+];
+
+export const training: readonly ExperienceEntry[] = [
+  {
+    id: 'inzva-camp',
+    organization: 'Algorithm Winter & Summer Camp 2025',
+    role: 'inzva · Istanbul',
+    dates: '2025',
+    contributions: [
+      'Selected as one of 50 participants from more than 300 applicants.',
+      'Studied advanced dynamic programming, graphs, and trees.',
+      'Solved more than 50 Algoleague problems and competed in an ICPC-style contest.',
+    ],
+  },
+  {
+    id: 'teknofest-trendyol',
+    organization: 'TEKNOFEST 2025 – Trendyol E-Commerce Hackathon',
+    role: 'Top 20 Finalist',
+    dates: '2025',
+    contributions: [
+      'Reached the Top 20 among 302 teams and 1,181 participants.',
+      'Worked on e-commerce feature engineering, model training, click-through-rate, and conversion prediction.',
+    ],
   },
 ];
