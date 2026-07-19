@@ -24,7 +24,7 @@ export function clampResize(window: WindowInstance, requested: Size, viewport: R
   const minWidth = Math.min(window.minSize.width, viewport.width);
   const minHeight = Math.min(window.minSize.height, usableHeight);
   const position = {
-    x: Math.min(window.position.x, viewport.width - minWidth),
+    x: Math.max(0, Math.min(window.position.x, viewport.width - minWidth)),
     y: Math.max(0, Math.min(window.position.y, usableHeight - minHeight)),
   };
   const maxWidth = Math.max(minWidth, viewport.width - position.x);

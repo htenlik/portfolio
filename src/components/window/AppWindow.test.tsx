@@ -36,6 +36,16 @@ describe('AppWindow resizing and scroll state', () => {
     expect(screen.getByTestId('window-state')).toHaveTextContent(height);
   });
 
+  it('drags a desktop window by its title bar within the usable viewport', async () => {
+    const { container } = render(<WindowManagerProvider><WindowHarness /></WindowManagerProvider>);
+    await userEvent.click(screen.getByRole('button', { name: 'Open about' }));
+    const titlebar = container.querySelector<HTMLElement>('section[aria-label="My Computer — About"] > div')!;
+    fireEvent.pointerDown(titlebar, { pointerId: 2, clientX: 200, clientY: 80, button: 0 });
+    fireEvent.pointerMove(titlebar, { pointerId: 2, clientX: 250, clientY: 110 });
+    fireEvent.pointerUp(titlebar, { pointerId: 2 });
+    expect(screen.getByTestId('window-state')).toHaveTextContent('"position":{"x":178,"y":94}');
+  });
+
   it('starts a newly opened window at the top of its content', async () => {
     const scrollTo = vi.fn();
     Object.defineProperty(HTMLElement.prototype, 'scrollTo', { configurable: true, value: scrollTo });

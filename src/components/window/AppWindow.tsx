@@ -25,9 +25,10 @@ export function AppWindow({ window, children }: { window: WindowInstance; childr
   };
   const move = (event: PointerEvent<HTMLDivElement>) => {
     if (!drag.current) return;
-    const width = Math.min(window.size.width, innerWidth);
-    const x = Math.max(-width + 90, Math.min(innerWidth - 90, drag.current.x + event.clientX - drag.current.pointerX));
-    const y = Math.max(0, Math.min(innerHeight - 78, drag.current.y + event.clientY - drag.current.pointerY));
+    const width = Math.min(window.size.width, viewport.width);
+    const height = Math.min(window.size.height, viewport.height - 36);
+    const x = Math.max(0, Math.min(viewport.width - width, drag.current.x + event.clientX - drag.current.pointerX));
+    const y = Math.max(0, Math.min(viewport.height - 36 - height, drag.current.y + event.clientY - drag.current.pointerY));
     manager.moveWindow(window.id, { x, y });
   };
   const stop = () => { drag.current = null; };
@@ -52,11 +53,11 @@ export function AppWindow({ window, children }: { window: WindowInstance; childr
   };
   const stopResize = () => { resize.current = null; document.body.style.userSelect = ''; };
   const safeWidth = Math.min(window.size.width, viewport.width);
-  const safeHeight = Math.min(window.size.height, viewport.height - 40);
-  const style = mobile || window.isMaximized ? undefined : { left: Math.max(-safeWidth + 90, Math.min(viewport.width - 90, window.position.x)), top: Math.max(0, Math.min(viewport.height - 78, window.position.y)), width: safeWidth, height: safeHeight, zIndex: window.zIndex };
+  const safeHeight = Math.min(window.size.height, viewport.height - 36);
+  const style = mobile || window.isMaximized ? undefined : { left: Math.max(0, Math.min(viewport.width - safeWidth, window.position.x)), top: Math.max(0, Math.min(viewport.height - 36 - safeHeight, window.position.y)), width: safeWidth, height: safeHeight, zIndex: window.zIndex };
   return (
     <section className={`${styles.window} ${window.isMaximized ? styles.maximized : ''} ${manager.state.activeId === window.id ? styles.activeWindow : ''}`} style={style} onPointerDown={() => manager.focusWindow(window.id)} aria-label={window.title}>
-      <div className={`${styles.titlebar} ${manager.state.activeId === window.id ? styles.active : ''}`} onDoubleClick={() => manager.toggleMaximize(window.id)} onPointerDown={startDrag} onPointerMove={move} onPointerUp={stop} onPointerCancel={stop}>
+      <div className={`${styles.titlebar} ${manager.state.activeId === window.id ? styles.active : ''}`} onDoubleClick={() => manager.toggleMaximize(window.id)} onPointerDown={startDrag} onPointerMove={move} onPointerUp={stop} onPointerCancel={stop} onMouseUp={stop}>
         <span><img src={window.icon} alt="" />{window.title}</span>
         <div className={styles.controls}>
           <button type="button" className={styles.minimize} aria-label={`Minimize ${window.title}`} onClick={() => manager.minimizeWindow(window.id)}><span /></button>
@@ -67,9 +68,9 @@ export function AppWindow({ window, children }: { window: WindowInstance; childr
       <div ref={content} className={styles.content} data-window-content={window.id}>{children}</div>
       <div className={styles.status}><span>Ready</span><i aria-hidden="true" /></div>
       {!mobile && !window.isMaximized && <>
-        <div className={`${styles.resizeHandle} ${styles.resizeRight}`} data-direction="right" aria-hidden="true" onPointerDown={startResize} onPointerMove={resizeMove} onPointerUp={stopResize} onPointerCancel={stopResize} />
-        <div className={`${styles.resizeHandle} ${styles.resizeBottom}`} data-direction="bottom" aria-hidden="true" onPointerDown={startResize} onPointerMove={resizeMove} onPointerUp={stopResize} onPointerCancel={stopResize} />
-        <div className={`${styles.resizeHandle} ${styles.resizeCorner}`} data-direction="bottom-right" aria-label={`Resize ${window.title}`} role="separator" aria-orientation="vertical" onPointerDown={startResize} onPointerMove={resizeMove} onPointerUp={stopResize} onPointerCancel={stopResize} />
+        <div className={`${styles.resizeHandle} ${styles.resizeRight}`} data-direction="right" aria-hidden="true" onPointerDown={startResize} onPointerMove={resizeMove} onPointerUp={stopResize} onPointerCancel={stopResize} onLostPointerCapture={stopResize} onMouseUp={stopResize} />
+        <div className={`${styles.resizeHandle} ${styles.resizeBottom}`} data-direction="bottom" aria-hidden="true" onPointerDown={startResize} onPointerMove={resizeMove} onPointerUp={stopResize} onPointerCancel={stopResize} onLostPointerCapture={stopResize} onMouseUp={stopResize} />
+        <div className={`${styles.resizeHandle} ${styles.resizeCorner}`} data-direction="bottom-right" aria-label={`Resize ${window.title}`} role="separator" aria-orientation="vertical" onPointerDown={startResize} onPointerMove={resizeMove} onPointerUp={stopResize} onPointerCancel={stopResize} onLostPointerCapture={stopResize} onMouseUp={stopResize} />
       </>}
     </section>
   );
