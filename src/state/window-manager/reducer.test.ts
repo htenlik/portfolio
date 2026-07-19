@@ -51,7 +51,7 @@ describe('windowReducer', () => {
   it('enforces minimum dimensions', () => {
     const opened = windowReducer(initialWindowState, { type: 'OPEN', id: 'minesweeper' });
     const resized = windowReducer(opened, { type: 'RESIZE', id: 'minesweeper', size: { width: 1, height: 1 }, viewport: { width: 1200, height: 800, taskbarHeight: 36 } });
-    expect(resized.windows.minesweeper?.size).toEqual({ width: 330, height: 420 });
+    expect(resized.windows.minesweeper?.size).toEqual({ width: 190, height: 280 });
   });
 
   it('clamps resized windows to viewport and taskbar boundaries', () => {

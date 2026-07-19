@@ -19,7 +19,7 @@ export const windowRegistry: Record<WindowId, WindowDefinition> = {
   experience: definition('experience', 'Experiences', '/icons/briefcase.svg', 190, 88, 720, 500),
   projects: definition('projects', 'My Projects', '/icons/folder.svg', 96, 46, 820, 560),
   resume: definition('resume', 'Resume.pdf', '/icons/document.svg', 235, 58, 660, 540),
-  minesweeper: definition('minesweeper', 'Minesweeper.exe', '/icons/mine.svg', 280, 76, 390, 500, 330, 420),
+  minesweeper: definition('minesweeper', 'Minesweeper.exe', '/icons/mine.svg', 280, 76, 200, 290, 190, 280),
   contact: definition('contact', 'Contact', '/icons/contact.svg', 310, 110, 500, 380),
   secret: definition('secret', 'secret.txt', '/icons/secret.svg', 340, 120, 470, 340),
   'project/jotform-sign-analytics': definition('project/jotform-sign-analytics', 'Jotform Sign Analytics', '/icons/chart.svg', 170, 48, 780, 570),

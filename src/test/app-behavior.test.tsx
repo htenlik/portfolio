@@ -29,6 +29,15 @@ describe('portfolio UI behavior', () => {
     expect(screen.queryByRole('navigation', { name: 'Start menu' })).not.toBeInTheDocument();
   });
 
+  it('launches Expert Minesweeper from the Shut Down dialog', async () => {
+    render(<App />);
+    await userEvent.click(screen.getByRole('button', { name: 'start' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Shut Down' }));
+    expect(screen.getByText(/Before shutting down, you have to beat Expert-level Minesweeper/)).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: 'Play Expert Minesweeper' }));
+    expect(screen.getByRole('grid', { name: '16 by 30 Minesweeper board' })).toBeInTheDocument();
+  });
+
   it('restores a minimized window from its taskbar button', async () => {
     render(<WindowManagerProvider><Desktop /><Taskbar /><StateProbe /></WindowManagerProvider>);
     await userEvent.dblClick(screen.getByRole('button', { name: /my computer, shortcut/i }));
