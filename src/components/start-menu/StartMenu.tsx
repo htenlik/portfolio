@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { useWindowManager } from '../../state/window-manager/WindowManagerContext';
+import { contact } from '../../content/contact';
 import type { WindowId } from '../../types/windows';
 import styles from './StartMenu.module.css';
 
-const items: { id: WindowId | 'github'; label: string; icon: string }[] = [
+const items: { id: WindowId | 'github' | 'linkedin'; label: string; icon: string }[] = [
   { id: 'about', label: 'About', icon: '/icons/computer.svg' }, { id: 'experience', label: 'Work Experience', icon: '/icons/briefcase.svg' },
   { id: 'projects', label: 'Projects', icon: '/icons/folder.svg' }, { id: 'resume', label: 'Resume', icon: '/icons/document.svg' },
   { id: 'minesweeper', label: 'Minesweeper', icon: '/icons/mine.svg' }, { id: 'github', label: 'GitHub', icon: '/icons/globe.svg' },
   { id: 'contact', label: 'Contact', icon: '/icons/contact.svg' },
+  ...(contact.linkedin ? [{ id: 'linkedin' as const, label: 'LinkedIn', icon: '/icons/globe.svg' }] : []),
 ];
 
 export function StartMenu({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -27,7 +29,7 @@ export function StartMenu({ open, onClose }: { open: boolean; onClose: () => voi
     <>
       {open && <div ref={menu} id="start-menu" className={styles.menu}>
         <header><img src="/icons/ht-mark.svg" alt="" /><span><strong>Hüseyin Tenlik</strong><small>Software Engineer</small></span></header>
-        <nav aria-label="Start menu">{items.map((item) => <button key={item.id} type="button" onClick={() => { if (item.id === 'github') window.open('https://github.com/htenlik', '_blank', 'noopener,noreferrer'); else openWindow(item.id); onClose(); }}><img src={item.icon} alt="" /><span>{item.label}</span></button>)}</nav>
+        <nav aria-label="Start menu">{items.map((item) => <button key={item.id} type="button" onClick={() => { if (item.id === 'github') window.open('https://github.com/htenlik', '_blank', 'noopener,noreferrer'); else if (item.id === 'linkedin' && contact.linkedin) window.open(contact.linkedin, '_blank', 'noopener,noreferrer'); else openWindow(item.id as WindowId); onClose(); }}><img src={item.icon} alt="" /><span>{item.label}</span></button>)}</nav>
         <footer><button type="button" onClick={() => { setShutdown(true); onClose(); }}><span aria-hidden="true">⏻</span> Shut Down</button></footer>
       </div>}
       {shutdown && <div className={styles.overlay} role="presentation" onPointerDown={(e) => { if (e.target === e.currentTarget) setShutdown(false); }}><section role="dialog" aria-modal="true" aria-labelledby="shutdown-title" className={styles.dialog}><h2 id="shutdown-title">Shut Down htenlikOS</h2><p>You can close this tab, but htenlikOS will be here when you return.</p><button className="retro-button" type="button" autoFocus onClick={() => setShutdown(false)}>Return to desktop</button></section></div>}

@@ -1,2 +1,2 @@
-/** Set this after adding the public PDF under public/. */
-export const resumeFile: string | null = null;
+export const resumeFile = '/huseyin_tenlik_cv.pdf' as const;
+export const resumeDownloadName = 'huseyin_tenlik_cv.pdf' as const;
