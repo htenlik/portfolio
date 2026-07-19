@@ -1,5 +1,6 @@
 .desktop { position: fixed; inset: 0 0 var(--taskbar-height); overflow: hidden; background: #4c9ad1 url('/wallpapers/htenlik-hills.svg') center / cover no-repeat; }
 .grid { display: grid; grid-auto-flow: column; grid-template-rows: repeat(5, 88px); grid-auto-columns: 92px; gap: 4px; align-content: start; justify-content: start; height: 100%; padding: 14px 10px; }
+.grid > div { display: flex; justify-content: center; }
 .icon { display: flex; flex-direction: column; align-items: center; gap: 3px; width: 86px; min-height: 78px; padding: 4px 3px; color: white; font-size: .72rem; line-height: 1.2; text-align: center; text-shadow: 1px 1px 2px #123; background: transparent; border: 1px solid transparent; border-radius: 2px; cursor: default; user-select: none; }
 .icon img { width: 43px; height: 43px; pointer-events: none; filter: drop-shadow(2px 2px 1px rgb(0 0 0 / 30%)); }
 .icon span { max-width: 80px; padding: 1px 3px; overflow-wrap: anywhere; }

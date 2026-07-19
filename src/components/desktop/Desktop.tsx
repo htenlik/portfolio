@@ -25,11 +25,13 @@ export function Desktop({ secretVisible = false }: { secretVisible?: boolean }) 
       <h1 className="sr-only">Hüseyin Tenlik — Software Engineer portfolio</h1>
       <div className={styles.grid} role="list" aria-label="Desktop shortcuts">
         {[...entries, ...(secretVisible ? [{ id: 'secret' as const, label: 'secret.txt', icon: '/icons/secret.svg' }] : [])].map((entry) => (
-          <button key={entry.id} type="button" role="listitem" className={`${styles.icon} ${selected === entry.id ? styles.selected : ''}`}
-            onClick={() => { setSelected(entry.id); if (mobile) open(entry.id); }} onDoubleClick={() => !mobile && open(entry.id)}
-            onKeyDown={(event) => { if (event.key === 'Enter') open(entry.id); }} aria-label={`${entry.label}, shortcut`}>
-            <img src={entry.icon} alt="" draggable="false" /><span>{entry.label}</span>
-          </button>
+          <div key={entry.id} role="listitem">
+            <button type="button" className={`${styles.icon} ${selected === entry.id ? styles.selected : ''}`}
+              onClick={() => { setSelected(entry.id); if (mobile) open(entry.id); }} onDoubleClick={() => !mobile && open(entry.id)}
+              onKeyDown={(event) => { if (event.key === 'Enter') open(entry.id); }} aria-label={`${entry.label}, shortcut`}>
+              <img src={entry.icon} alt="" draggable="false" /><span>{entry.label}</span>
+            </button>
+          </div>
         ))}
       </div>
     </div>
