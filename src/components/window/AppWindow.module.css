@@ -1,0 +1,12 @@
+.window { position: fixed; z-index: 20; display: flex; flex-direction: column; min-width: 300px; min-height: 220px; overflow: hidden; background: var(--surface); border: 3px solid #0b55be; border-radius: 7px 7px 2px 2px; box-shadow: var(--window-shadow); }
+.maximized { inset: 0 0 var(--taskbar-height) !important; width: auto !important; height: auto !important; border-radius: 0; }
+.titlebar { display: flex; flex: 0 0 32px; align-items: center; justify-content: space-between; padding: 3px 4px 3px 7px; color: #e4eaf5; font-weight: 700; font-size: .79rem; background: linear-gradient(#7897bd, #426b9b); user-select: none; touch-action: none; }
+.titlebar.active { color: white; background: var(--title-gradient); }
+.titlebar > span { display: flex; align-items: center; gap: 6px; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.titlebar img { width: 18px; height: 18px; }
+.controls { display: flex; gap: 2px; }
+.controls button { display: grid; place-items: center; width: 24px; height: 23px; padding: 0; color: white; font-weight: 700; line-height: 1; background: linear-gradient(#76a8eb, #1d5aaf); border: 1px solid white; border-radius: 3px; text-shadow: 1px 1px #134584; cursor: pointer; }
+.controls button:last-child { background: linear-gradient(#f6a27f, #c93620); }
+.content { flex: 1; min-height: 0; margin: 0 3px; overflow: auto; background: #fff; border: 1px solid #7f9db9; }
+.status { flex: 0 0 22px; margin: 3px; padding: 3px 7px; color: #444; font-size: .72rem; border: 1px inset #fff; }
+@media (max-width: 640px) { .window, .maximized { inset: 0 0 var(--taskbar-height) !important; width: auto !important; height: auto !important; min-width: 0; min-height: 0; border-radius: 0; } .titlebar { flex-basis: 40px; font-size: .75rem; } .controls button { width: 34px; height: 32px; } }

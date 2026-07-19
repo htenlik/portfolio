@@ -1,0 +1,8 @@
+.boot { position: fixed; inset: 0; z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .55rem; width: 100%; color: white; background: #06194b; border: 0; cursor: pointer; }
+.boot img { width: 72px; height: 72px; }
+.boot strong { font-size: 2rem; letter-spacing: -.04em; }
+.boot span { color: #c8d8ff; }
+.boot i { width: min(240px, 70vw); height: 14px; padding: 2px; margin-top: 1.2rem; overflow: hidden; background: #020a20; border: 1px solid #709cff; }
+.boot b { display: block; width: 35%; height: 100%; background: linear-gradient(90deg, #3bc4ff, #fff, #3bc4ff); animation: load .7s linear infinite; }
+.boot small { margin-top: .8rem; color: #91a8d7; }
+@keyframes load { from { transform: translateX(-110%); } to { transform: translateX(300%); } }
