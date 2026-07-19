@@ -1,1 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc"><title id="title">htenlikOS rolling hills wallpaper</title><desc id="desc">An original blue sky over layered green hills with a winding path.</desc><defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#3e9dea"/><stop offset="1" stop-color="#bde8ff"/></linearGradient><linearGradient id="hill" x2="0" y2="1"><stop stop-color="#55b745"/><stop offset="1" stop-color="#1d742e"/></linearGradient></defs><rect width="1600" height="1000" fill="url(#sky)"/><g fill="#fff" opacity=".82"><path d="M180 170c55-70 145-43 166 18 56-23 117 11 118 62H96c4-54 45-88 84-80Z"/><path d="M1160 120c52-61 129-37 151 13 60-25 128 13 132 69h-370c3-53 48-88 87-82Z"/></g><path d="M0 590Q320 390 680 620t920-40v420H0Z" fill="#76c65b"/><path d="M0 745Q320 520 735 720t865-85v365H0Z" fill="url(#hill)"/><path d="M905 1000c-120-190-87-286 34-385 12 176 109 201 196 385Z" fill="#d9c57f" opacity=".78"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">htenlikOS rolling hills wallpaper</title><desc id="desc">An original sunlit valley beneath a deep blue sky and soft clouds.</desc>
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#2388df"/><stop offset=".58" stop-color="#78c6ef"/><stop offset="1" stop-color="#d3eff8"/></linearGradient>
+    <linearGradient id="far" x2="0" y2="1"><stop stop-color="#83cf5d"/><stop offset="1" stop-color="#3b9b3d"/></linearGradient>
+    <linearGradient id="near" x2="0" y2="1"><stop stop-color="#56b944"/><stop offset="1" stop-color="#146929"/></linearGradient>
+    <linearGradient id="light" x2="0" y2="1"><stop stop-color="#9bd96a"/><stop offset="1" stop-color="#3e9b39"/></linearGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="8"/></filter>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#sky)"/>
+  <g fill="#fff" opacity=".9" filter="url(#soft)"><path d="M92 220c37-55 104-62 151-20 44-65 150-50 168 24 70-24 142 14 157 73H38c4-41 24-66 54-77Z"/><path d="M1042 138c42-61 121-58 157-8 47-55 143-27 150 40 75-24 142 25 143 77h-542c11-64 72-106 132-109Z"/></g>
+  <path d="M0 610C205 500 385 469 589 520c192 48 319 154 535 113 197-38 317-116 476-75v442H0Z" fill="url(#far)"/>
+  <path d="M0 736c202-151 427-158 652-48 198 97 339 120 507 22 172-101 305-88 441-42v332H0Z" fill="url(#near)"/>
+  <path d="M0 870c261-157 521-126 739 8 132 81 250 101 381 54 150-54 303-82 480-13v81H0Z" fill="#0e5725" opacity=".48"/>
+  <path d="M0 711c246-134 429-119 614-35-264-38-400 32-614 174Z" fill="url(#light)" opacity=".92"/>
+  <g fill="#fff" opacity=".18"><ellipse cx="410" cy="650" rx="265" ry="37"/><ellipse cx="1175" cy="669" rx="224" ry="31"/></g>
+</svg>

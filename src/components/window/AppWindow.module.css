@@ -1,12 +1,23 @@
-.window { position: fixed; z-index: 20; display: flex; flex-direction: column; min-width: 300px; min-height: 220px; overflow: hidden; background: var(--surface); border: 3px solid #0b55be; border-radius: 7px 7px 2px 2px; box-shadow: var(--window-shadow); }
-.maximized { inset: 0 0 var(--taskbar-height) !important; width: auto !important; height: auto !important; border-radius: 0; }
-.titlebar { display: flex; flex: 0 0 32px; align-items: center; justify-content: space-between; padding: 3px 4px 3px 7px; color: #e4eaf5; font-weight: 700; font-size: .79rem; background: linear-gradient(#7897bd, #426b9b); user-select: none; touch-action: none; }
-.titlebar.active { color: white; background: var(--title-gradient); }
-.titlebar > span { display: flex; align-items: center; gap: 6px; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-.titlebar img { width: 18px; height: 18px; }
-.controls { display: flex; gap: 2px; }
-.controls button { display: grid; place-items: center; width: 24px; height: 23px; padding: 0; color: white; font-weight: 700; line-height: 1; background: linear-gradient(#76a8eb, #1d5aaf); border: 1px solid white; border-radius: 3px; text-shadow: 1px 1px #134584; cursor: pointer; }
-.controls button:last-child { background: linear-gradient(#f6a27f, #c93620); }
-.content { flex: 1; min-height: 0; margin: 0 3px; overflow: auto; background: #fff; border: 1px solid #7f9db9; }
-.status { flex: 0 0 22px; margin: 3px; padding: 3px 7px; color: #444; font-size: .72rem; border: 1px inset #fff; }
-@media (max-width: 640px) { .window, .maximized { inset: 0 0 var(--taskbar-height) !important; width: auto !important; height: auto !important; min-width: 0; min-height: 0; border-radius: 0; } .titlebar { flex-basis: 40px; font-size: .75rem; } .controls button { width: 34px; height: 32px; } }
+.window { position: fixed; z-index: 20; display: flex; flex-direction: column; min-width: 300px; min-height: 220px; overflow: hidden; background: #ece9d8; border: 1px solid #083e91; border-radius: 5px 5px 1px 1px; box-shadow: inset 1px 1px #5eb1ff, inset -1px -1px #001f64, var(--window-shadow); }
+.activeWindow { border-color: #003b99; box-shadow: inset 1px 1px #66b6ff, inset -1px -1px #001b55, 4px 5px 0 rgb(0 20 62 / 38%); }
+.maximized { inset: 0 0 var(--taskbar-height) !important; width: auto !important; height: auto !important; border-radius: 0; box-shadow: inset 1px 1px #5eb1ff; }
+.titlebar { display: flex; flex: 0 0 27px; align-items: center; justify-content: space-between; margin: 2px 2px 0; padding: 2px 2px 2px 4px; overflow: hidden; color: #e8edf4; font-weight: 700; font-size: 11px; line-height: 1; background: var(--inactive-title-gradient); text-shadow: 1px 1px #38506d; user-select: none; touch-action: none; }
+.titlebar.active { color: white; background: var(--title-gradient); text-shadow: 1px 1px #002760; }
+.titlebar > span { display: flex; align-items: center; gap: 4px; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.titlebar img { width: 17px; height: 17px; image-rendering: auto; }
+.controls { display: flex; flex: 0 0 auto; gap: 2px; margin-left: 5px; }
+.controls button { position: relative; width: 22px; height: 21px; padding: 0; color: white; background: linear-gradient(135deg, #77b7f1, #1f66bd 55%, #0b469d); border: 1px solid #fff; border-radius: 3px; box-shadow: inset 1px 1px rgb(255 255 255 / 45%), inset -1px -1px rgb(0 31 96 / 55%); cursor: default; }
+.controls button:active { transform: translate(1px, 1px); background: #1b58a7; box-shadow: inset 1px 1px #06377f; }
+.controls .close { background: linear-gradient(135deg, #f7ad91, #df5b3f 48%, #ad210f); }
+.controls span::before, .controls span::after { content: ''; position: absolute; display: block; }
+.minimize span::before { left: 5px; bottom: 5px; width: 9px; height: 2px; background: #fff; box-shadow: 1px 1px #123a77; }
+.maximize span::before { inset: 4px; border: 2px solid #fff; box-shadow: 1px 1px #123a77; }
+.restore span::before, .restore span::after { width: 8px; height: 7px; border: 2px solid #fff; }
+.restore span::before { top: 4px; left: 7px; }.restore span::after { top: 7px; left: 4px; background: #2d70bf; }
+.close span::before, .close span::after { top: 9px; left: 4px; width: 12px; height: 2px; background: #fff; box-shadow: 1px 1px #7a1409; transform: rotate(45deg); }.close span::after { transform: rotate(-45deg); }
+.content { flex: 1; min-height: 0; margin: 2px 3px 0; overflow: auto; background: #fff; border: 1px solid; border-color: #7f9db9 #fff #fff #7f9db9; box-shadow: inset 1px 1px #aca899; overscroll-behavior: contain; }
+.status { display: flex; flex: 0 0 21px; gap: 2px; margin: 2px 3px 3px; color: #333; font-size: 11px; }
+.status span { flex: 1; padding: 2px 5px; border: 1px solid; border-color: #aca899 #fff #fff #aca899; }
+.status i { position: relative; width: 16px; border: 1px solid; border-color: #aca899 #fff #fff #aca899; }
+.status i::after { content: ''; position: absolute; right: 1px; bottom: 1px; width: 10px; height: 10px; background: repeating-linear-gradient(135deg, transparent 0 2px, #aca899 2px 3px); }
+@media (max-width: 640px) { .window, .maximized { inset: 0 0 var(--taskbar-height) !important; width: auto !important; height: auto !important; min-width: 0; min-height: 0; border-radius: 0; } .titlebar { flex-basis: 36px; font-size: 11px; } .controls button { width: 31px; height: 29px; } .close span::before, .close span::after { top: 13px; left: 7px; width: 15px; } .maximize span::before { inset: 6px; } .minimize span::before { left: 7px; bottom: 7px; width: 13px; }.restore span::before { top: 7px; left: 10px; }.restore span::after { top: 10px; left: 7px; } }
