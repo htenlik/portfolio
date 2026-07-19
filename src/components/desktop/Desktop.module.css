@@ -1,10 +1,29 @@
 .desktop { position: fixed; inset: 0 0 var(--taskbar-height); overflow: hidden; background: #4c9ad1 url('/wallpapers/htenlik-hills.svg') center / cover no-repeat; }
 .desktop::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgb(0 40 95 / 10%), transparent 20% 80%, rgb(0 45 80 / 6%)); }
-.grid { position: relative; z-index: 1; display: grid; grid-auto-flow: column; grid-template-rows: repeat(6, 80px); grid-auto-columns: 86px; gap: 4px 3px; align-content: start; justify-content: start; height: 100%; padding: 10px 8px; }
-.grid > div { display: flex; justify-content: center; }
-.icon { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 82px; min-height: 74px; padding: 3px 2px; color: white; font-size: 11px; line-height: 1.18; text-align: center; text-shadow: 1px 1px #18314d, -1px 0 #18314d, 0 -1px #18314d; background: transparent; border: 1px solid transparent; cursor: default; user-select: none; }
+.grid { position: absolute; z-index: 1; inset: 0; }
+.shortcut { position: absolute; display: flex; justify-content: center; width: 84px; height: 78px; touch-action: none; }
+.icon { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 82px; min-height: 74px; padding: 3px 2px; color: white; font-size: 11px; line-height: 1.18; text-align: center; text-shadow: 1px 1px #18314d, -1px 0 #18314d, 0 -1px #18314d; background: transparent; border: 1px solid transparent; user-select: none; -webkit-user-select: none; }
 .icon img { width: 42px; height: 42px; pointer-events: none; filter: drop-shadow(2px 2px 1px rgb(0 0 0 / 38%)); }
-.icon span { max-width: 80px; padding: 1px 3px; overflow-wrap: anywhere; }
+.icon span { max-width: 80px; padding: 1px 3px; overflow-wrap: anywhere; pointer-events: none; }
 .icon.selected img { filter: sepia(.15) saturate(1.7) hue-rotate(175deg) brightness(.78) drop-shadow(2px 2px 1px rgb(0 0 0 / 35%)); }
 .icon.selected span { color: #fff; background: #0b3d91; outline: 1px dotted #fff; outline-offset: -2px; }
-@media (max-width: 640px) { .grid { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(82px, 1fr)); grid-template-rows: none; grid-auto-columns: auto; gap: 9px 0; width: 100%; padding-top: 15px; overflow: auto; } .icon { width: 100%; min-height: 86px; font-size: 11px; } .icon img { width: 46px; height: 46px; } }
+.contextMenu { position: fixed; z-index: 5000; min-width: 198px; padding: 2px; color: #000; font: 11px Tahoma, sans-serif; background: #ece9d8; border: 1px solid; border-color: #fff #404040 #404040 #fff; box-shadow: 1px 1px 0 #000, inset 1px 1px #f8f7ed; }
+.contextMenu button { display: block; width: 100%; min-height: 22px; padding: 3px 24px; color: #000; text-align: left; white-space: nowrap; background: transparent; border: 0; }
+.contextMenu button:hover:not(:disabled), .contextMenu button:focus-visible { color: #fff; background: #316ac5; outline: 0; }
+.contextMenu button:disabled { color: #7f7f7f; text-shadow: 1px 1px #fff; }
+.defaultItem { font-weight: 700; }
+.separator { height: 2px; margin: 3px 2px; border-top: 1px solid #aca899; border-bottom: 1px solid #fff; }
+.properties { position: fixed; z-index: 5100; top: 50%; left: 50%; width: min(330px, calc(100vw - 24px)); padding: 3px; color: #000; font: 11px Tahoma, sans-serif; background: #ece9d8; border: 1px solid #0831d9; box-shadow: 2px 2px 0 rgb(0 0 0 / 45%); transform: translate(-50%, -50%); }
+.propertiesTitle { min-height: 24px; padding: 4px 6px; color: #fff; font-weight: 700; background: linear-gradient(90deg, #0754e9, #4da5f7); }
+.propertiesBody { display: flex; gap: 14px; min-height: 112px; padding: 18px 14px 10px; border: 1px solid #fff; }
+.propertiesBody img { width: 48px; height: 48px; }
+.propertiesBody p { margin: 9px 0 0; }
+.propertiesActions { display: flex; justify-content: flex-end; padding: 8px; border-top: 1px solid #aca899; }
+.propertiesActions button { min-width: 74px; padding: 3px 12px; color: #000; background: #ece9d8; border: 2px solid; border-color: #fff #404040 #404040 #fff; }
+.propertiesActions button:active { border-color: #404040 #fff #fff #404040; }
+@media (max-width: 640px), (pointer: coarse) {
+  .grid { position: relative; display: grid; grid-template-columns: repeat(3, minmax(82px, 1fr)); align-content: start; gap: 9px 0; width: 100%; height: 100%; padding-top: 15px; overflow: auto; }
+  .shortcut { position: static; width: auto; height: 86px; touch-action: manipulation; }
+  .icon { width: 100%; min-height: 86px; font-size: 11px; }
+  .icon img { width: 46px; height: 46px; }
+}
