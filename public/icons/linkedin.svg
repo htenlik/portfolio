@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="LinkedIn">
+  <defs><linearGradient id="blue" x2="0" y2="1"><stop stop-color="#55b7ee"/><stop offset=".5" stop-color="#147cad"/><stop offset="1" stop-color="#07547e"/></linearGradient></defs>
+  <rect x="3" y="3" width="42" height="42" rx="3" fill="url(#blue)" stroke="#063c5d" stroke-width="2"/>
+  <path d="M5 5h38M5 5v38" fill="none" stroke="#bdeaff" stroke-width="2"/>
+  <path d="M43 6v37H6" fill="none" stroke="#03334f" stroke-width="2" opacity=".8"/>
+  <circle cx="14" cy="15" r="4" fill="#fff" stroke="#d6f2ff"/>
+  <path d="M10 22h8v17h-8zM22 22h7v3c2-3 4-4 7-4 6 0 7 4 7 10v8h-8v-8c0-3-1-4-3-4s-3 2-3 5v7h-7z" fill="#fff" stroke="#d6f2ff" stroke-width=".6" stroke-linejoin="bevel"/>
+</svg>

@@ -6,7 +6,6 @@ export const profile = {
   summary: 'Hüseyin is a software engineer focused on backend systems, full-stack product development, and practical engineering. His work spans analytics systems, geospatial applications, distributed computing, and production-oriented web development.',
   links: [
     { label: 'GitHub', value: 'github.com/htenlik', href: 'https://github.com/htenlik' },
-    { label: 'Website', value: 'htenlik.com', href: 'https://htenlik.com' },
   ],
   technologies: {
     Backend: ['Java', 'Spring Boot', 'C#', '.NET', 'PHP', 'Python'],

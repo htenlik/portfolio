@@ -16,7 +16,7 @@ const definition = (
 
 export const windowRegistry: Record<WindowId, WindowDefinition> = {
   about: definition('about', 'My Computer — About', '/icons/computer.svg', 128, 64, 650, 480),
-  experience: definition('experience', 'Work Experience', '/icons/briefcase.svg', 190, 88, 720, 500),
+  experience: definition('experience', 'Experiences', '/icons/briefcase.svg', 190, 88, 720, 500),
   projects: definition('projects', 'My Projects', '/icons/folder.svg', 96, 46, 820, 560),
   resume: definition('resume', 'Resume.pdf', '/icons/document.svg', 235, 58, 660, 540),
   minesweeper: definition('minesweeper', 'Minesweeper.exe', '/icons/mine.svg', 280, 76, 390, 500, 330, 420),
