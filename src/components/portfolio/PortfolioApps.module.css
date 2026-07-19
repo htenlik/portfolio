@@ -69,7 +69,8 @@
 .galleryStrip span { position: absolute; right: 2px; bottom: 2px; min-width: 14px; padding: 1px 2px; color: #fff; font-size: 9px; background: #0a246a; }
 .gallery > p { margin: 4px 2px 0; color: #444; font-size: 10px; }
 .caseBody { max-width: 850px; margin: auto; padding: 16px; }.caseBody h2 { margin: 3px 0 8px; font-size: 17px; }.caseBody h3 { margin: 16px 0 4px; color: #274f7d; font-size: 12px; border-bottom: 1px solid #aca899; }
-.action { display: inline-block; margin: 6px 8px 0 0; padding: 4px 8px; color: #111; font-weight: 700; text-decoration: none; background: #ece9d8; border: 1px solid #003c74; box-shadow: inset 1px 1px #fff, inset -1px -1px #aca899; }
+.action { display: inline-flex; align-items: center; gap: 4px; margin: 6px 8px 0 0; padding: 4px 8px; color: #111; font-weight: 700; text-decoration: none; background: #ece9d8; border: 1px solid #003c74; box-shadow: inset 1px 1px #fff, inset -1px -1px #aca899; }
+.action img { width: 16px; height: 16px; image-rendering: auto; }
 .empty { display: grid; place-items: center; align-content: center; min-height: 100%; padding: 18px; text-align: center; }.empty img { width: 64px; }.empty p { max-width: 54ch; }.empty code { padding: 2px 5px; background: #e8edf3; }
 .resume { display: flex; flex-direction: column; height: 100%; }.resume nav { display: flex; gap: 6px; padding: 5px; background: var(--surface); }.resume nav a { color: #111; text-decoration: none; }.resume iframe { flex: 1; width: 100%; min-height: 0; background: #777; border: 0; }
 .contact { min-height: 100%; padding: 15px; background: #ece9d8; }.contact header { margin-bottom: 10px; }

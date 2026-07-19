@@ -3,7 +3,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import userEvent from '@testing-library/user-event';
 import { App } from '../app/App';
 import { Desktop } from '../components/desktop/Desktop';
-import { ContactApp, ResumeApp } from '../components/portfolio/PortfolioApps';
+import { ContactApp, ProjectDetailApp, ResumeApp } from '../components/portfolio/PortfolioApps';
 import { contact } from '../content/contact';
 import { resumeDownloadName, resumeFile } from '../content/resume';
 import { Taskbar } from '../components/taskbar/Taskbar';
@@ -95,6 +95,15 @@ describe('portfolio UI behavior', () => {
     expect(container.querySelector('iframe')).toHaveAttribute('src', '/huseyin_tenlik_cv.pdf#view=FitH&toolbar=1');
     expect(responseHeaders).toContain('X-Frame-Options: SAMEORIGIN');
     expect(responseHeaders).not.toContain('X-Frame-Options: DENY');
+  });
+
+  it('shows the verified internship workflow live demo with a web icon', () => {
+    const { container } = render(<ProjectDetailApp id="internship-workflow-management" />);
+    const demo = screen.getByRole('link', { name: /Go to Live Demo/ });
+    expect(demo).toHaveAttribute('href', 'https://internship-workflow-management-syst.vercel.app/');
+    expect(demo).toHaveAttribute('target', '_blank');
+    expect(demo).toHaveAttribute('rel', 'noreferrer');
+    expect(container.querySelector('a[href="https://internship-workflow-management-syst.vercel.app/"] img')).toHaveAttribute('src', '/icons/globe.svg');
   });
 
   it('shows and copies only the obfuscated email value', async () => {

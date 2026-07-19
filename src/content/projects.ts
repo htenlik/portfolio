@@ -1,5 +1,5 @@
 export type ProjectCategory = 'Professional' | 'Full Stack' | 'Systems' | 'In Progress';
-export interface ProjectLink { label: string; href: string }
+export interface ProjectLink { label: string; href: string; icon?: string }
 export interface ProjectMedia { src: string; alt: string; kind: 'concept' | 'sanitized' | 'diagram' }
 export interface Project {
   id: 'jotform-sign-analytics' | 'internship-workflow-management' | 'tasinmaz-management-system' | 'mpi-gather-torus';
@@ -23,7 +23,10 @@ export const projects: readonly Project[] = [
     challenge: 'Coordinate role-based internship processes and supporting documents through a single authenticated workflow.',
     contributions: ['Implemented a React and Vite frontend with protected, role-based pages.', 'Built Spring Boot services using Spring Data JPA and Spring Security.', 'Supported internship report drafts, submission, PDF upload, and status tracking.', 'Modeled semester administration and supervisor request, token, and OTP verification flows.', 'Containerized the PostgreSQL development database with Docker Compose.'],
     technologies: ['React', 'Vite', 'Spring Boot', 'Spring Data JPA', 'Spring Security', 'JWT', 'PostgreSQL', 'Docker'], outcomes: ['Working public prototype', 'Role-aware internship workflows', 'Document and verification flows'],
-    links: [{ label: 'View Repository', href: 'https://github.com/htenlik/Internship-Workflow-Management-System' }],
+    links: [
+      { label: 'View Repository', href: 'https://github.com/htenlik/Internship-Workflow-Management-System' },
+      { label: 'Go to Live Demo', href: 'https://internship-workflow-management-syst.vercel.app/', icon: '/icons/globe.svg' },
+    ],
     media: [{ src: '/media/projects/internship-workflow/internship-workflow-preview.svg', alt: 'Conceptual internship workflow from applicant through completion', kind: 'concept' }],
   },
   {
