@@ -1,0 +1,10 @@
+{
+  "name": "htenlikOS — Hüseyin Tenlik Portfolio",
+  "short_name": "htenlikOS",
+  "description": "The engineering portfolio of Hüseyin Tenlik.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#3b78bb",
+  "theme_color": "#1559bd",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

@@ -1,5 +1,6 @@
 import { useRef, type PointerEvent, type ReactNode } from 'react';
 import { useMediaQuery } from '../../hooks/useMediaQuery';
+import { useViewportSize } from '../../hooks/useViewportSize';
 import { useWindowManager } from '../../state/window-manager/WindowManagerContext';
 import type { WindowInstance } from '../../types/windows';
 import styles from './AppWindow.module.css';
@@ -7,6 +8,7 @@ import styles from './AppWindow.module.css';
 export function AppWindow({ window, children }: { window: WindowInstance; children: ReactNode }) {
   const manager = useWindowManager();
   const mobile = useMediaQuery('(max-width: 640px)');
+  const viewport = useViewportSize();
   const drag = useRef<{ pointerX: number; pointerY: number; x: number; y: number } | null>(null);
   if (!window.isOpen || window.isMinimized) return null;
   const startDrag = (event: PointerEvent<HTMLDivElement>) => {
@@ -22,7 +24,9 @@ export function AppWindow({ window, children }: { window: WindowInstance; childr
     manager.moveWindow(window.id, { x, y });
   };
   const stop = () => { drag.current = null; };
-  const style = mobile || window.isMaximized ? undefined : { left: window.position.x, top: window.position.y, width: window.size.width, height: window.size.height, zIndex: window.zIndex };
+  const safeWidth = Math.min(window.size.width, viewport.width);
+  const safeHeight = Math.min(window.size.height, viewport.height - 40);
+  const style = mobile || window.isMaximized ? undefined : { left: Math.max(-safeWidth + 90, Math.min(viewport.width - 90, window.position.x)), top: Math.max(0, Math.min(viewport.height - 78, window.position.y)), width: safeWidth, height: safeHeight, zIndex: window.zIndex };
   return (
     <section className={`${styles.window} ${window.isMaximized ? styles.maximized : ''}`} style={style} onPointerDown={() => manager.focusWindow(window.id)} aria-label={window.title}>
       <div className={`${styles.titlebar} ${manager.state.activeId === window.id ? styles.active : ''}`} onDoubleClick={() => manager.toggleMaximize(window.id)} onPointerDown={startDrag} onPointerMove={move} onPointerUp={stop} onPointerCancel={stop}>

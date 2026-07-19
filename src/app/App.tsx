@@ -9,6 +9,7 @@ import { useCallback, useState } from 'react';
 import { useHashWindows } from '../hooks/useHashWindows';
 import { WindowManagerProvider, useWindowManager } from '../state/window-manager/WindowManagerContext';
 import styles from './App.module.css';
+import { ErrorBoundary } from './ErrorBoundary';
 
 function Shell() {
   useHashWindows();
@@ -38,4 +39,4 @@ function Shell() {
   );
 }
 
-export function App() { return <WindowManagerProvider><Shell /></WindowManagerProvider>; }
+export function App() { return <ErrorBoundary><WindowManagerProvider><Shell /></WindowManagerProvider></ErrorBoundary>; }

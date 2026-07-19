@@ -21,6 +21,7 @@ export function StartMenu({ open, onClose }: { open: boolean; onClose: () => voi
     document.addEventListener('keydown', key); document.addEventListener('pointerdown', outside);
     return () => { document.removeEventListener('keydown', key); document.removeEventListener('pointerdown', outside); };
   }, [onClose, open]);
+  useEffect(() => { if (!shutdown) return; const close = (event: KeyboardEvent) => { if (event.key === 'Escape') setShutdown(false); }; document.addEventListener('keydown', close); return () => document.removeEventListener('keydown', close); }, [shutdown]);
   if (!open && !shutdown) return null;
   return (
     <>
