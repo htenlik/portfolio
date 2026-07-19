@@ -13,7 +13,9 @@ export function AppWindow({ window, children }: { window: WindowInstance; childr
   const resize = useRef<{ pointerX: number; pointerY: number; width: number; height: number; direction: ResizeDirection } | null>(null);
   const content = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
-    if (window.isOpen) content.current?.scrollTo({ top: 0, left: 0 });
+    if (!window.isOpen || !content.current) return;
+    if (typeof content.current.scrollTo === 'function') content.current.scrollTo({ top: 0, left: 0 });
+    else { content.current.scrollTop = 0; content.current.scrollLeft = 0; }
   }, [window.isOpen]);
   if (!window.isOpen || window.isMinimized) return null;
   const startDrag = (event: PointerEvent<HTMLDivElement>) => {

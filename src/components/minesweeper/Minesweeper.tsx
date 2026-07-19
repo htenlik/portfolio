@@ -76,7 +76,7 @@ export function Minesweeper({ onWin, random = Math.random }: { onWin: () => void
     <div className={styles.gameFrame}>
       <div className={styles.panel}>
         <Counter value={flagsRemaining(game)} label={`${flagsRemaining(game)} mines remaining`} />
-        <button type="button" className={styles.faceButton} aria-label="Start a new game" onClick={reset}><Face state={faceState} /></button>
+        <button type="button" className={styles.faceButton} data-face={faceState} aria-label="Start a new game" onClick={reset}><Face state={faceState} /></button>
         <Counter value={seconds} label={`${seconds} seconds elapsed`} />
       </div>
       <div className={styles.touchTools}><button type="button" className={flagMode ? styles.enabled : ''} aria-pressed={flagMode} onClick={() => setFlagMode((value) => !value)}><span aria-hidden="true">⚑</span> Flag mode</button></div>
