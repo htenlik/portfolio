@@ -1,10 +1,13 @@
 .retro-button {
-  min-height: 30px;
-  padding: .25rem .75rem;
+  min-height: 24px;
+  padding: 2px 10px;
   color: var(--ink);
-  background: var(--surface);
-  border: 2px solid;
-  border-color: var(--border-light) var(--surface-dark) var(--surface-dark) var(--border-light);
+  background: #ece9d8;
+  border: 1px solid #003c74;
+  box-shadow: inset 1px 1px #fff, inset -1px -1px #aca899;
+  border-radius: 2px;
   cursor: pointer;
 }
-.retro-button:active { border-color: var(--surface-dark) var(--border-light) var(--border-light) var(--surface-dark); }
+.retro-button:hover { box-shadow: inset 1px 1px #fff, inset -1px -1px #aca899, 0 0 0 1px #f7b735; }
+.retro-button:active { padding: 3px 9px 1px 11px; box-shadow: inset 1px 1px #7f9db9; }
+.retro-button:disabled { color: #aca899; text-shadow: 1px 1px #fff; border-color: #aca899; }

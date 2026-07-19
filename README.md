@@ -18,14 +18,14 @@ The repository includes the original visual assets used by the application:
 
 - Session-only, skippable htenlikOS boot sequence with reduced-motion support
 - Keyboard- and pointer-operable desktop shortcuts
-- Custom window manager with open, focus, overlap, drag, minimize, restore, maximize, close, and taskbar behavior
+- Custom window manager with open, focus, overlap, drag, right/bottom/corner resize, minimize, restore, maximize, close, and taskbar behavior
 - Responsive full-screen application panels on mobile
 - Start menu, safe “Shut Down” dialog, live local clock, and date tooltip
 - Shareable hashes for applications and project details, including `#about`, `#projects`, and `#project/tasinmaz-management-system`
 - Data-driven profile, experience, contact, and project case studies
-- Complete 9×9 Minesweeper with delayed mine placement, first-click safety, flags, flood reveal, timer, keyboard/touch controls, and deterministic engine tests
+- Classic 9×9 Minesweeper with delayed mine placement, first-neighborhood safety, smiley-only reset, seven-segment counters, flags, flood reveal, timer, keyboard/touch controls, and deterministic engine tests
 - Persistent `secret.txt` unlock after the first Minesweeper victory
-- Missing-resume and failed-image fallbacks, storage guards, and a React error boundary
+- Embedded public resume with a short availability fallback, failed-image fallbacks, storage guards, and a React error boundary
 - Indexable metadata, canonical URL, Open Graph/Twitter cards, manifest, robots file, and sitemap
 
 ## Architecture
@@ -54,7 +54,7 @@ src/
 
 ### Window manager
 
-`WindowManagerProvider` owns a typed reducer. The central registry supplies each single-instance window's title, icon, initial position, dimensions, and minimum size. Reducer actions open, focus, move, minimize, restore, maximize, and close windows while maintaining z-order. Pointer events implement drag behavior; rendering clamps dimensions and positions whenever the viewport changes. At 640 px and below, windows become full-screen panels above the taskbar and dragging is disabled.
+`WindowManagerProvider` owns a typed reducer. The central registry supplies each single-instance window's title, icon, initial position, dimensions, and minimum size. Reducer actions open, focus, move, resize, minimize, restore, maximize, and close windows while maintaining z-order. Pointer events implement dragging plus right-edge, bottom-edge, and bottom-right resizing; dimensions are clamped to each app's minimum size and the usable viewport above the taskbar. At 640 px and below, windows become full-screen panels above the taskbar and arbitrary dragging/resizing is disabled.
 
 Hashes map directly to registry IDs without a routing dependency. Supported examples include:
 
@@ -80,7 +80,7 @@ The engine in `src/components/minesweeper/engine.ts` is independent from React. 
 - Profile, summary, education, and technology groups: `src/content/profile.ts`
 - Work experience: `src/content/experience.ts`
 - Project facts, links, media, and case-study sections: `src/content/projects.ts`
-- Public contact links: `src/content/contact.ts`
+- Public contact links, obfuscated email, and optional LinkedIn profile: `src/content/contact.ts`
 - Resume availability: `src/content/resume.ts`
 
 Content files are intentionally separate from components. Keep claims conservative and public. Never add internal endpoints, private company code, customer data, tokens, private screenshots, or inferred contact details.
@@ -98,15 +98,9 @@ public/media/projects/mpi-torus/
 
 Then add a `ProjectMedia` entry in `src/content/projects.ts`. Use an accurate `alt` description and set `kind` to `concept`, `sanitized`, or `diagram`. Never commit confidential screenshots or remote image hotlinks.
 
-### Adding the resume
+### Resume file
 
-The public PDF is intentionally absent until a reviewed file is available.
-
-1. Add it at `public/Huseyin-Tenlik-CV.pdf`.
-2. Set `resumeFile` in `src/content/resume.ts` to `'/Huseyin-Tenlik-CV.pdf'`.
-3. Rebuild and confirm View, Download, embedded preview, and fallback behavior.
-
-Do not replace it with a generated or placeholder PDF.
+The reviewed public resume must be stored at `public/huseyin_tenlik_cv.pdf`. The application serves it at `/huseyin_tenlik_cv.pdf`, uses the same lowercase filename for downloads, and checks availability before rendering the embedded preview.
 
 ## Local development
 
@@ -134,7 +128,7 @@ For watch-mode tests, run `npm test`. To inspect the production build locally:
 npm run preview
 ```
 
-Tests cover the window reducer, Minesweeper engine, desktop opening, Start menu dismissal, taskbar restore, persisted secret visibility, and missing-resume fallback. Responsive behavior is designed and verified at 320, 375, 768, 1024, and 1440 px.
+Behavioral tests cover window state and all three resize handles, viewport/taskbar clamping, scroll reset for direct and hash opens, Minesweeper engine and interaction rules, contact copy/obfuscation, optional LinkedIn rendering, resume integration, desktop opening, Start menu dismissal, taskbar restore, and the persisted secret.
 
 ## Production build and Cloudflare Workers
 
@@ -156,17 +150,7 @@ npx wrangler deploy
 
 The equivalent package command is `npm run deploy`.
 
-### Required Cloudflare dashboard update before merge
-
-The current production configuration serves the legacy `public` directory. Before merging this feature branch, update the connected Cloudflare Workers build configuration to exactly:
-
-| Setting | Value |
-| --- | --- |
-| Build command | `npm ci && npm run build` |
-| Deploy command | `npx wrangler deploy` |
-| Root directory | `/` |
-
-Remove or replace the old static-public/`public` output configuration so Cloudflare deploys the Vite-generated `dist` directory through `wrangler.jsonc`. Keep the existing custom domain managed in the Cloudflare dashboard. Do not change DNS records. This feature branch must not be attached to or deployed over the production custom domain before review and merge.
+The existing production pipeline deploys the Vite-generated `dist` directory through `wrangler.jsonc`. Feature branches should use `npx wrangler deploy --dry-run` for compatibility validation and must not be deployed to the production custom domain before review and merge.
 
 ## Accessibility
 
@@ -174,10 +158,10 @@ The interface uses semantic buttons and links, strong visible focus indicators, 
 
 ## Privacy and confidentiality
 
-The Jotform case study contains only generalized contributions from the approved brief and an original mock-data SVG. It exposes no source code, internal paths, product data, customer identifiers, emails, or screenshots. Email and LinkedIn are not published because no explicitly public values were found in this repository. Project repositories are linked only where public URLs were verified.
+The Jotform case study contains only generalized contributions from the approved brief and an original mock-data SVG. It exposes no source code, internal paths, product data, customer identifiers, or screenshots. Public contact values are centralized in `src/content/contact.ts`; the email is visually obfuscated and the LinkedIn URL was verified from the reviewed resume. Project repositories are linked only where public URLs were verified.
 
 ## Status and Git workflow
 
-Development happens on `feature/retro-portfolio`. The production `main` branch retains the Under Construction site until this branch is reviewed and intentionally merged. Do not force-push or deploy the feature branch to the production custom domain.
+Second-pass refinement work happens on `feature/classic-xp-refinement`. Do not force-push, merge locally into `main`, or deploy the feature branch to the production custom domain.
 
 Milestones are committed independently. For follow-up work, branch from the intended base, run all four quality commands, review the built `dist` tree, and open a pull request rather than merging locally into `main`.

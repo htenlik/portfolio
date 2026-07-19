@@ -4,7 +4,9 @@ body { min-height: 100dvh; overflow: hidden; }
 button, input, select, textarea { font: inherit; }
 a { color: #0645ad; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+:focus-visible { outline: 1px dotted var(--focus); outline-offset: -3px; }
+button { color: inherit; }
+::selection { color: #fff; background: #0a246a; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }

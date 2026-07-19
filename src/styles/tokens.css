@@ -12,12 +12,13 @@
   --border-dark: #263c55;
   --ink: #151515;
   --ink-muted: #545454;
-  --focus: #ffb000;
+  --focus: #111;
   --success: #188537;
   --danger: #c52b20;
-  --title-gradient: linear-gradient(180deg, #2f86e9 0%, #0756bd 52%, #0646a1 100%);
-  --window-shadow: 4px 6px 18px rgb(0 24 64 / 35%);
-  --taskbar-height: 40px;
+  --title-gradient: linear-gradient(180deg, #3f9cff 0%, #0b67d5 8%, #0855bd 55%, #063b93 94%, #0a4dae 100%);
+  --inactive-title-gradient: linear-gradient(180deg, #a9bfd9 0%, #7f9db9 48%, #6e88a5 100%);
+  --window-shadow: 3px 4px 0 rgb(0 20 62 / 34%);
+  --taskbar-height: 36px;
   font-family: var(--font-ui);
   color: var(--ink);
   background: var(--desktop-blue);

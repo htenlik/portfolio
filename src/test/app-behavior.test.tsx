@@ -3,7 +3,9 @@ import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { App } from '../app/App';
 import { Desktop } from '../components/desktop/Desktop';
-import { ResumeApp } from '../components/portfolio/PortfolioApps';
+import { ContactApp, ResumeApp } from '../components/portfolio/PortfolioApps';
+import { contact } from '../content/contact';
+import { resumeDownloadName, resumeFile } from '../content/resume';
 import { Taskbar } from '../components/taskbar/Taskbar';
 import { WindowManagerProvider, useWindowManager } from '../state/window-manager/WindowManagerContext';
 
@@ -44,7 +46,33 @@ describe('portfolio UI behavior', () => {
   });
 
   it('renders a graceful missing-resume fallback', () => {
-    render(<ResumeApp />);
-    expect(screen.getByText('The public resume PDF has not been added to this repository yet.')).toBeInTheDocument();
+    render(<ResumeApp expectedAvailable={false} />);
+    expect(screen.getByText('The resume is temporarily unavailable. Please try again later.')).toBeInTheDocument();
+    expect(document.body).not.toHaveTextContent(/public\/|repository|configure/i);
+  });
+
+  it('uses the configured resume path for open, download, and preview', () => {
+    const { container } = render(<ResumeApp expectedAvailable />);
+    expect(screen.getByRole('link', { name: 'Open PDF' })).toHaveAttribute('href', resumeFile);
+    expect(screen.getByRole('link', { name: 'Download PDF' })).toHaveAttribute('download', resumeDownloadName);
+    expect(container.querySelector('object')).toHaveAttribute('data', '/huseyin_tenlik_cv.pdf');
+  });
+
+  it('shows only the obfuscated email and copies the valid address', async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText } });
+    render(<ContactApp />);
+    expect(screen.getByText('h[dot]tenlik7677[at]gmail[dot]com')).toBeInTheDocument();
+    expect(document.body).not.toHaveTextContent(contact.email.address);
+    await userEvent.click(screen.getAllByRole('button', { name: 'Copy' })[0]!);
+    expect(writeText).toHaveBeenCalledWith(contact.email.address);
+    expect(screen.getByRole('status')).toHaveTextContent('Email address copied to clipboard.');
+  });
+
+  it('renders LinkedIn only when it is configured', () => {
+    const { rerender } = render(<ContactApp details={{ email: contact.email, links: contact.links }} />);
+    expect(screen.queryByText('LinkedIn profile')).not.toBeInTheDocument();
+    rerender(<ContactApp />);
+    expect(screen.getByText('LinkedIn profile')).toHaveAttribute('href', contact.linkedin);
   });
 });

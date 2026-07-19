@@ -1,5 +1,5 @@
 export type GameStatus = 'ready' | 'playing' | 'won' | 'lost';
-export interface Cell { row: number; col: number; isMine: boolean; adjacent: number; isRevealed: boolean; isFlagged: boolean; isIncorrectFlag: boolean }
+export interface Cell { row: number; col: number; isMine: boolean; adjacent: number; isRevealed: boolean; isFlagged: boolean; isIncorrectFlag: boolean; isExploded: boolean }
 export interface GameState { rows: number; cols: number; mineCount: number; cells: Cell[]; status: GameStatus; started: boolean }
 export type RandomSource = () => number;
 
@@ -15,7 +15,7 @@ const neighbors = (state: Pick<GameState, 'rows' | 'cols'>, row: number, col: nu
 
 export function createGame(rows = 9, cols = 9, mineCount = 10): GameState {
   if (rows < 1 || cols < 1 || mineCount < 0 || mineCount >= rows * cols) throw new Error('Invalid Minesweeper dimensions');
-  return { rows, cols, mineCount, status: 'ready', started: false, cells: Array.from({ length: rows * cols }, (_, index) => ({ row: Math.floor(index / cols), col: index % cols, isMine: false, adjacent: 0, isRevealed: false, isFlagged: false, isIncorrectFlag: false })) };
+  return { rows, cols, mineCount, status: 'ready', started: false, cells: Array.from({ length: rows * cols }, (_, index) => ({ row: Math.floor(index / cols), col: index % cols, isMine: false, adjacent: 0, isRevealed: false, isFlagged: false, isIncorrectFlag: false, isExploded: false })) };
 }
 
 export function placeMines(game: GameState, safeRow: number, safeCol: number, random: RandomSource = Math.random): GameState {
@@ -34,12 +34,14 @@ export function placeMines(game: GameState, safeRow: number, safeCol: number, ra
 
 export function revealCell(game: GameState, row: number, col: number, random: RandomSource = Math.random): GameState {
   if (!inBounds(game, row, col) || game.status === 'won' || game.status === 'lost') return game;
+  const originalTarget = game.cells[indexOf(game, row, col)]!;
+  if (originalTarget.isFlagged || originalTarget.isRevealed) return game;
   const next = game.started ? game : placeMines(game, row, col, random);
   const targetIndex = indexOf(next, row, col); const target = next.cells[targetIndex]!;
-  if (target.isFlagged || target.isRevealed) return next;
   const cells = next.cells.map((cell) => ({ ...cell }));
   if (target.isMine) {
     cells.forEach((cell) => { if (cell.isMine) cell.isRevealed = true; if (cell.isFlagged && !cell.isMine) cell.isIncorrectFlag = true; });
+    cells[targetIndex]!.isExploded = true;
     return { ...next, cells, status: 'lost' };
   }
   const queue = [targetIndex]; const visited = new Set<number>();

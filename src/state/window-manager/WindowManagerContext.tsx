@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useMemo, useReducer, type ReactNode } from 'react';
-import type { Point, WindowId } from '../../types/windows';
+import type { Point, ResizeViewport, Size, WindowId } from '../../types/windows';
 import { initialWindowState, windowReducer } from './reducer';
 
 interface WindowManagerValue {
@@ -7,6 +7,7 @@ interface WindowManagerValue {
   openWindow: (id: WindowId, updateHash?: boolean) => void;
   focusWindow: (id: WindowId) => void;
   moveWindow: (id: WindowId, position: Point) => void;
+  resizeWindow: (id: WindowId, size: Size, viewport: ResizeViewport) => void;
   minimizeWindow: (id: WindowId) => void;
   restoreWindow: (id: WindowId) => void;
   toggleMaximize: (id: WindowId) => void;
@@ -29,6 +30,7 @@ export function WindowManagerProvider({ children }: { children: ReactNode }) {
     state, openWindow,
     focusWindow: (id) => dispatch({ type: 'FOCUS', id }),
     moveWindow: (id, position) => dispatch({ type: 'MOVE', id, position }),
+    resizeWindow: (id, size, viewport) => dispatch({ type: 'RESIZE', id, size, viewport }),
     minimizeWindow: (id) => dispatch({ type: 'MINIMIZE', id }),
     restoreWindow: (id) => dispatch({ type: 'RESTORE', id }),
     toggleMaximize: (id) => dispatch({ type: 'TOGGLE_MAXIMIZE', id }),
