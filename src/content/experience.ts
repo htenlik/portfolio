@@ -50,13 +50,6 @@ export const experience: readonly ExperienceEntry[] = [
     ],
     technologies: ['PHP', 'REST APIs', 'Analytics', 'OpenAPI', 'Contract testing'],
   },
-  {
-    id: 'vakifbank',
-    organization: 'VakıfBank',
-    role: 'Backend Developer Intern',
-    dates: 'Aug. 2026 – Present',
-    contributions: [],
-  },
 ];
 
 export const training: readonly ExperienceEntry[] = [
