@@ -1,5 +1,5 @@
 .game { position: relative; min-width: 100%; min-height: 100%; overflow: auto; color: #000; font: 11px/1 Tahoma, sans-serif; background: #c0c0c0; user-select: none; }
-.scaler { width: max-content; min-width: calc(var(--columns) * 16px + 16px); transform-origin: top left; zoom: var(--mine-scale); }
+.scaler { width: max-content; min-width: calc(var(--columns) * 16px + 16px); margin: 0 auto; transform-origin: top center; zoom: var(--mine-scale); }
 .menuBar { position: relative; z-index: 4; display: flex; height: 20px; background: #ece9d8; }
 .menuSlot { position: relative; }
 .menuSlot > button { height: 20px; padding: 0 6px; color: #000; font: inherit; background: transparent; border: 0; }

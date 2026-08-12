@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent } from 'react';
 import { chordCell, createGame, cycleMark, difficulties, flagsRemaining, revealCell, type Cell, type Difficulty, type GameStatus, type RandomSource } from './engine';
 import { mineAssets } from './referenceAssets';
+import { getResponsiveMineScale } from './responsiveScale';
 import styles from './Minesweeper.module.css';
 
 type MenuName = 'Game' | 'Help';
@@ -38,6 +39,7 @@ export function Minesweeper({ onWin, random = Math.random, initialDifficulty = '
   const [marks, setMarks] = useState(true);
   const [theme, setTheme] = useState<ThemeName>('xp');
   const [scale, setScale] = useState(1);
+  const [responsiveScale, setResponsiveScale] = useState(1);
   const [openMenu, setOpenMenu] = useState<MenuName | null>(null);
   const [dialog, setDialog] = useState<'help' | 'about' | null>(null);
   const [pressedIndex, setPressedIndex] = useState<number | null>(null);
@@ -46,6 +48,7 @@ export function Minesweeper({ onWin, random = Math.random, initialDifficulty = '
   const wonReported = useRef(false);
   const longPressTimer = useRef<number | null>(null);
   const longPressed = useRef(false);
+  const gameRef = useRef<HTMLElement>(null);
 
   const reset = useCallback((nextDifficulty = difficulty) => {
     const config = dimensions(nextDifficulty);
@@ -54,6 +57,19 @@ export function Minesweeper({ onWin, random = Math.random, initialDifficulty = '
   }, [difficulty]);
 
   useEffect(() => { onBoardSizeChange?.(difficulty, scale); }, [difficulty, onBoardSizeChange, scale]);
+  useEffect(() => {
+    const element = gameRef.current;
+    if (!element) return;
+    const update = () => setResponsiveScale(getResponsiveMineScale(element.clientWidth, element.clientHeight, game.rows, game.cols));
+    update();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', update);
+      return () => window.removeEventListener('resize', update);
+    }
+    const observer = new ResizeObserver(update);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [game.cols, game.rows]);
   useEffect(() => {
     if (game.status !== 'playing') return;
     const timer = window.setInterval(() => setSeconds((value) => Math.min(999, value + 1)), 1000);
@@ -108,10 +124,11 @@ export function Minesweeper({ onWin, random = Math.random, initialDifficulty = '
   };
   const label = (cell: Cell) => cell.isIncorrectFlag ? `Row ${cell.row + 1}, column ${cell.col + 1}, incorrectly flagged` : cell.isFlagged ? `Row ${cell.row + 1}, column ${cell.col + 1}, flagged` : cell.isQuestion ? `Row ${cell.row + 1}, column ${cell.col + 1}, question mark` : !cell.isRevealed ? `Row ${cell.row + 1}, column ${cell.col + 1}, hidden` : cell.isExploded ? `Row ${cell.row + 1}, column ${cell.col + 1}, exploded mine` : cell.isMine ? `Row ${cell.row + 1}, column ${cell.col + 1}, mine` : `Row ${cell.row + 1}, column ${cell.col + 1}, ${cell.adjacent ? `${cell.adjacent} adjacent mines` : 'empty'}`;
   const chooseDifficulty = (value: Difficulty) => reset(value);
-  const style = { '--columns': game.cols, '--mine-scale': scale } as CSSProperties;
+  const effectiveScale = Math.max(scale, responsiveScale);
+  const style = { '--columns': game.cols, '--mine-scale': effectiveScale } as CSSProperties;
   const themeClass = theme === 'xp' ? styles.themeXp : theme === '98' ? styles.theme98 : styles.theme31;
 
-  return <section className={`${styles.game} ${themeClass}`} aria-label="Minesweeper" onContextMenu={(event) => event.preventDefault()}>
+  return <section ref={gameRef} className={`${styles.game} ${themeClass}`} aria-label="Minesweeper" data-scale={effectiveScale} onContextMenu={(event) => event.preventDefault()}>
     <div className={styles.scaler} style={style}>
       <div className={styles.menuBar}>{(['Game', 'Help'] as const).map((menu) => <span className={styles.menuSlot} key={menu}><button type="button" aria-haspopup="menu" aria-expanded={openMenu === menu} onPointerDown={() => setOpenMenu(menu)} onPointerEnter={() => { if (openMenu) setOpenMenu(menu); }}>{menu}</button>{openMenu === menu && <span className={styles.dropDown} role="menu">{menu === 'Game' ? <>
         <MenuRow hotkey="F2" onSelect={() => reset()}>New</MenuRow><Separator />
