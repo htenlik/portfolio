@@ -2,7 +2,7 @@
 .desktop::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgb(0 40 95 / 10%), transparent 20% 80%, rgb(0 45 80 / 6%)); }
 .grid { position: absolute; z-index: 1; inset: 0; }
 .shortcut { position: absolute; display: flex; justify-content: center; width: 84px; height: 78px; touch-action: none; }
-.icon { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 82px; min-height: 74px; padding: 3px 2px; color: white; font-size: 11px; line-height: 1.18; text-align: center; text-shadow: 1px 1px #18314d, -1px 0 #18314d, 0 -1px #18314d; background: transparent; border: 1px solid transparent; user-select: none; -webkit-user-select: none; }
+.icon { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 82px; min-height: 74px; padding: 3px 2px; color: white; font-size: 12px; line-height: 1.18; text-align: center; text-shadow: 1px 1px #18314d, -1px 0 #18314d, 0 -1px #18314d; background: transparent; border: 1px solid transparent; user-select: none; -webkit-user-select: none; }
 .icon img { width: 42px; height: 42px; pointer-events: none; filter: drop-shadow(2px 2px 1px rgb(0 0 0 / 38%)); }
 .icon span { max-width: 80px; padding: 1px 3px; overflow-wrap: anywhere; pointer-events: none; }
 .icon.selected img { filter: sepia(.15) saturate(1.7) hue-rotate(175deg) brightness(.78) drop-shadow(2px 2px 1px rgb(0 0 0 / 35%)); }
