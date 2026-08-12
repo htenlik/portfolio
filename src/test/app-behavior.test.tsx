@@ -3,7 +3,7 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import userEvent from '@testing-library/user-event';
 import { App } from '../app/App';
 import { Desktop } from '../components/desktop/Desktop';
-import { ContactApp, ProjectDetailApp, ResumeApp } from '../components/portfolio/PortfolioApps';
+import { ContactApp, ExperienceApp, ProjectDetailApp, ProjectsApp, ResumeApp } from '../components/portfolio/PortfolioApps';
 import { contact } from '../content/contact';
 import { resumeDownloadName, resumeFile } from '../content/resume';
 import { Taskbar } from '../components/taskbar/Taskbar';
@@ -104,6 +104,29 @@ describe('portfolio UI behavior', () => {
     expect(demo).toHaveAttribute('target', '_blank');
     expect(demo).toHaveAttribute('rel', 'noreferrer');
     expect(container.querySelector('a[href="https://internship-workflow-management-syst.vercel.app/"] img')).toHaveAttribute('src', '/icons/globe.svg');
+  });
+
+  it('hides empty project categories and exposes the expanded project galleries', async () => {
+    render(<WindowManagerProvider><ProjectsApp /></WindowManagerProvider>);
+    expect(screen.queryByRole('button', { name: 'In Progress' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Professional' })).toBeInTheDocument();
+    cleanup();
+    render(<ProjectDetailApp id="jotform-sign-analytics" />);
+    expect(screen.getAllByRole('button', { name: /Show image/ })).toHaveLength(4);
+  });
+
+  it('lists the most recent Jotform experience first', () => {
+    render(<ExperienceApp />);
+    const experienceButtons = screen.getAllByRole('button').filter((button) => button.textContent?.includes('2026') || button.textContent?.includes('2025'));
+    expect(experienceButtons[0]).toHaveTextContent('Jotform');
+    expect(screen.getByRole('heading', { name: 'Jotform' })).toBeInTheDocument();
+  });
+
+  it('previews the MPI report inside its project gallery', async () => {
+    const { container } = render(<ProjectDetailApp id="mpi-gather-torus" />);
+    await userEvent.click(screen.getByRole('button', { name: /Show image 2/ }));
+    expect(container.querySelector('iframe')).toHaveAttribute('src', '/media/projects/mpi-torus/BBM442_Huseyin_Tenlik.pdf#view=FitH&toolbar=1');
+    expect(screen.getByRole('link', { name: /Open Technical Report/ })).toHaveAttribute('href', '/media/projects/mpi-torus/BBM442_Huseyin_Tenlik.pdf');
   });
 
   it('shows and copies only the obfuscated email value', async () => {
