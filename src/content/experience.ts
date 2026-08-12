@@ -10,18 +10,18 @@ export interface ExperienceEntry {
 
 export const experience: readonly ExperienceEntry[] = [
   {
-    id: 'odakgis',
-    organization: 'OdakGIS',
-    role: 'Part-time Full Stack Web Developer',
-    dates: 'Apr. 2025 – Oct. 2025',
-    context: 'Worked on government-supported web-based geographic information system applications.',
+    id: 'jotform',
+    organization: 'Jotform',
+    role: 'Backend Developer Intern',
+    dates: 'Jun. 2026 – Aug. 2026',
+    context: 'Worked in a three-person team on a PHP-based Sign Analytics and AI Insights product.',
     contributions: [
-      'Developed frontend modules, REST APIs, and database schemas with Angular, .NET, PostgreSQL, OpenLayers, and GeoServer.',
-      'Contributed to data management, debugging, and workflow improvements across GIS applications.',
-      'Implemented map and image upload, visualization, and location-oriented interface features.',
-      'Owned modules from implementation through deployment support.',
+      'Built REST APIs and aggregation pipelines for filters, field analytics, event activity, daily signing and engagement trends, document metadata, and signer sessions.',
+      'Developed field-friction scoring and AI-assisted insight and health assessments.',
+      'Documented APIs with OpenAPI and used privacy-aware metadata handling.',
+      'Added contract tests and helped prepare the product demo.',
     ],
-    technologies: ['Angular', '.NET', 'PostgreSQL', 'OpenLayers', 'GeoServer', 'GIS'],
+    technologies: ['PHP', 'REST APIs', 'Analytics', 'OpenAPI', 'Contract testing'],
   },
   {
     id: 'tubitak-dream',
@@ -37,18 +37,18 @@ export const experience: readonly ExperienceEntry[] = [
     technologies: ['React', 'Spring Boot', 'PostgreSQL', 'Docker', 'DSL modeling'],
   },
   {
-    id: 'jotform',
-    organization: 'Jotform',
-    role: 'Backend Developer Intern',
-    dates: 'Jun. 2026 – Aug. 2026',
-    context: 'Worked in a three-person team on a PHP-based Sign Analytics and AI Insights product.',
+    id: 'odakgis',
+    organization: 'OdakGIS',
+    role: 'Part-time Full Stack Web Developer',
+    dates: 'Apr. 2025 – Oct. 2025',
+    context: 'Worked on government-supported web-based geographic information system applications.',
     contributions: [
-      'Built REST APIs and aggregation pipelines for filters, field analytics, event activity, daily signing and engagement trends, document metadata, and signer sessions.',
-      'Developed field-friction scoring and AI-assisted insight and health assessments.',
-      'Documented APIs with OpenAPI and used privacy-aware metadata handling.',
-      'Added contract tests and helped prepare the product demo.',
+      'Developed frontend modules, REST APIs, and database schemas with Angular, .NET, PostgreSQL, OpenLayers, and GeoServer.',
+      'Contributed to data management, debugging, and workflow improvements across GIS applications.',
+      'Implemented map and image upload, visualization, and location-oriented interface features.',
+      'Owned modules from implementation through deployment support.',
     ],
-    technologies: ['PHP', 'REST APIs', 'Analytics', 'OpenAPI', 'Contract testing'],
+    technologies: ['Angular', '.NET', 'PostgreSQL', 'OpenLayers', 'GeoServer', 'GIS'],
   },
 ];
 
