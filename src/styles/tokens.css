@@ -20,6 +20,7 @@
   --window-shadow: 3px 4px 0 rgb(0 20 62 / 34%);
   --taskbar-height: 36px;
   font-family: var(--font-ui);
+  font-size: 12px;
   color: var(--ink);
   background: var(--desktop-blue);
   font-synthesis: none;

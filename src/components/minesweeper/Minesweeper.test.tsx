@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createGame, revealCell } from './engine';
 import { Minesweeper } from './Minesweeper';
+import { getResponsiveMineScale } from './responsiveScale';
 
 const zero = () => 0;
 const cells = () => screen.getAllByRole('gridcell');
@@ -19,6 +20,13 @@ function winGame() {
 afterEach(() => { cleanup(); vi.useRealTimers(); });
 
 describe('Minesweeper-XP component', () => {
+  it('scales the classic board up to use a larger window without exceeding its cap', () => {
+    expect(getResponsiveMineScale(220, 280, 9, 9)).toBe(1.2);
+    expect(getResponsiveMineScale(500, 680, 9, 9)).toBeGreaterThan(2);
+    expect(getResponsiveMineScale(2000, 2000, 9, 9)).toBe(3);
+    expect(getResponsiveMineScale(120, 160, 9, 9)).toBe(1);
+  });
+
   it('offers the reference Game menu and resets from the smiley', () => {
     render(<Minesweeper onWin={() => undefined} random={zero} />);
     fireEvent.pointerDown(screen.getByRole('button', { name: 'Game' }));
