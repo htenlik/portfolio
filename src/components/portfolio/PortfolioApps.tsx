@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { contact, type PublicContact } from '../../content/contact';
 import { experience, training, type ExperienceEntry } from '../../content/experience';
 import { profile } from '../../content/profile';
 import { getProject, projects, type Project, type ProjectCategory } from '../../content/projects';
-import { resumeDownloadName, resumeFile } from '../../content/resume';
 import { useWindowManager } from '../../state/window-manager/WindowManagerContext';
 import type { WindowId } from '../../types/windows';
 import styles from './PortfolioApps.module.css';
@@ -45,14 +44,6 @@ function ProjectCaseStudy({ project }: { project: Project }) {
   const current = project.media[selectedMedia] ?? project.media[0];
   const move = (offset: number) => setSelectedMedia((index) => (index + offset + project.media.length) % project.media.length);
   return <article className={styles.caseStudy}>{current && <section className={styles.gallery} aria-label={`${project.title} gallery`}><div className={styles.galleryStage}>{current.kind === 'document' ? <iframe className={styles.documentPreview} src={`${current.src}#view=FitH&toolbar=1`} title={current.alt} /> : <img src={current.src} alt={current.alt} onError={(event) => { event.currentTarget.hidden = true; }} />}{project.media.length > 1 && <><button type="button" className={styles.galleryPrevious} aria-label="Previous image" onClick={() => move(-1)}>‹</button><button type="button" className={styles.galleryNext} aria-label="Next image" onClick={() => move(1)}>›</button></>}</div><div className={styles.galleryStrip}>{project.media.map((media, index) => <button type="button" key={`${media.src}-${index}`} aria-label={`Show image ${index + 1}: ${media.alt}`} aria-pressed={selectedMedia === index} onClick={() => setSelectedMedia(index)}><img src={media.thumbnail ?? media.src} alt="" /><span>{index + 1}</span></button>)}</div><p>{selectedMedia + 1} of {project.media.length} · {current.alt}</p></section>}<div className={styles.caseBody}><p className={styles.eyebrow}>{project.subtitle} · {project.status}</p><h2>{project.title}</h2><p className={styles.lede}>{project.summary}</p><section><h3>Role</h3><p>{project.role}</p></section><section><h3>Challenge</h3><p>{project.challenge}</p></section><section><h3>Contributions</h3><ul>{project.contributions.map((item) => <li key={item}>{item}</li>)}</ul></section><section><h3>Outcomes</h3><ul>{project.outcomes.map((item) => <li key={item}>{item}</li>)}</ul></section><section><h3>Technologies</h3><ul className={styles.tags}>{project.technologies.map((item) => <li key={item}>{item}</li>)}</ul></section>{project.confidentialityNote && <p className={styles.note}>{project.confidentialityNote}</p>}<p className={styles.projectActions}>{project.links.map((link) => <a className={styles.action} key={link.href} href={link.href} target="_blank" rel="noreferrer">{link.icon && <img src={link.icon} alt="" />}{link.label} ↗</a>)}</p></div></article>;
-}
-
-export function ResumeApp({ expectedAvailable }: { expectedAvailable?: boolean } = {}) {
-  const [available, setAvailable] = useState<boolean | null>(expectedAvailable ?? null);
-  useEffect(() => { if (expectedAvailable !== undefined) return; const controller = new AbortController(); void fetch(resumeFile, { method: 'HEAD', cache: 'no-store', signal: controller.signal }).then((response) => setAvailable(response.ok)).catch((error: unknown) => { if (!(error instanceof DOMException && error.name === 'AbortError')) setAvailable(false); }); return () => controller.abort(); }, [expectedAvailable]);
-  if (available === null) return <article className={styles.empty} aria-live="polite"><img src="/icons/document.svg" alt="" /><h2>Resume viewer</h2><p>Loading resume…</p></article>;
-  if (!available) return <article className={styles.empty}><img src="/icons/document.svg" alt="" /><h2>Resume unavailable</h2><p>The resume is temporarily unavailable. Please try again later.</p></article>;
-  return <div className={styles.resume}><nav aria-label="Resume actions"><a className="retro-button" href={resumeFile} target="_blank" rel="noreferrer">Open PDF</a><a className="retro-button" href={resumeFile} download={resumeDownloadName}>Download PDF</a></nav><iframe src={`${resumeFile}#view=FitH&toolbar=1`} title="Hüseyin Tenlik resume preview" /></div>;
 }
 
 export function ContactApp({ details = contact }: { details?: PublicContact } = {}) {

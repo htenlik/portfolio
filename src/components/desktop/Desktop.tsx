@@ -19,7 +19,6 @@ const entries: DesktopEntry[] = [
   { id: 'about', label: 'My Computer', icon: '/icons/computer.svg' },
   { id: 'experience', label: 'Experiences', icon: '/icons/briefcase.svg' },
   { id: 'projects', label: 'My Projects', icon: '/icons/folder.svg' },
-  { id: 'resume', label: 'Resume.pdf', icon: '/icons/document.svg' },
   { id: 'github', label: 'GitHub.url', icon: '/icons/github.svg' },
   { id: 'linkedin', label: 'LinkedIn.url', icon: '/icons/linkedin.svg' },
   { id: 'minesweeper', label: 'Minesweeper.exe', icon: '/icons/mine.svg' },

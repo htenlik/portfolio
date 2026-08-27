@@ -7,7 +7,7 @@ import styles from './StartMenu.module.css';
 
 const items: { id: WindowId | 'github' | 'linkedin'; label: string; icon: string }[] = [
   { id: 'about', label: 'About', icon: '/icons/computer.svg' }, { id: 'experience', label: 'Experiences', icon: '/icons/briefcase.svg' },
-  { id: 'projects', label: 'Projects', icon: '/icons/folder.svg' }, { id: 'resume', label: 'Resume', icon: '/icons/document.svg' },
+  { id: 'projects', label: 'Projects', icon: '/icons/folder.svg' },
   { id: 'minesweeper', label: 'Minesweeper', icon: '/icons/mine.svg' }, { id: 'github', label: 'GitHub', icon: '/icons/github.svg' },
   { id: 'contact', label: 'Contact', icon: '/icons/contact.svg' },
   ...(contact.linkedin ? [{ id: 'linkedin' as const, label: 'LinkedIn', icon: '/icons/linkedin.svg' }] : []),

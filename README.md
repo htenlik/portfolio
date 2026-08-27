@@ -11,7 +11,7 @@ It combines a functional window manager, classic desktop interactions, structure
 - Draggable, resizable, minimizable, maximizable application windows
 - Taskbar, Start menu, boot sequence, hash links, and responsive mobile windows
 - Data-driven experience, training, project, profile, and contact content
-- Multi-image project galleries and an embedded PDF resume
+- Multi-image project galleries with screenshots, diagrams, and technical reports
 - Beginner, Intermediate, and Expert Minesweeper with chording and classic rules
 - Keyboard navigation, visible focus states, reduced-motion support, and touch-friendly fallbacks
 
@@ -76,15 +76,8 @@ Public-facing information is centralized in typed content files:
 - Experience and training: `src/content/experience.ts`
 - Projects and gallery media: `src/content/projects.ts`
 - Contact details: `src/content/contact.ts`
-- Resume configuration: `src/content/resume.ts`
 
 Project media belongs under `public/media/projects/`. Each project accepts multiple gallery entries with descriptive alternative text.
-
-The public resume must be placed at:
-
-```text
-public/huseyin_tenlik_cv.pdf
-```
 
 ## Attribution
 
