@@ -2,7 +2,7 @@ import { BootScreen } from '../components/boot/BootScreen';
 import { Desktop } from '../components/desktop/Desktop';
 import { Taskbar } from '../components/taskbar/Taskbar';
 import { AppWindow } from '../components/window/AppWindow';
-import { AboutApp, ContactApp, ExperienceApp, ProjectDetailApp, ProjectsApp, ResumeApp } from '../components/portfolio/PortfolioApps';
+import { AboutApp, ContactApp, ExperienceApp, ProjectDetailApp, ProjectsApp } from '../components/portfolio/PortfolioApps';
 import { Minesweeper } from '../components/minesweeper/Minesweeper';
 import type { Difficulty } from '../components/minesweeper/engine';
 import { listenForMinesweeperRequest } from '../components/minesweeper/launch';
@@ -34,7 +34,6 @@ function Shell() {
         if (item.id === 'about') content = <AboutApp />;
         if (item.id === 'experience') content = <ExperienceApp />;
         if (item.id === 'projects') content = <ProjectsApp />;
-        if (item.id === 'resume') content = <ResumeApp />;
         if (item.id === 'contact') content = <ContactApp />;
         if (item.id === 'minesweeper') content = <Minesweeper key={minesweeperLaunch.key} initialDifficulty={minesweeperLaunch.difficulty} onWin={unlockSecret} onExit={() => closeWindow('minesweeper')} onBoardSizeChange={sizeMinesweeper} />;
         if (item.id === 'secret') content = <article className={styles.secret}><img src="/icons/secret.svg" alt="" /><p>You cleared the field.</p><p>That probably means you are persistent enough to inspect the rest of the system too.</p><p>Thanks for visiting htenlikOS.</p><a href="https://github.com/htenlik/portfolio" target="_blank" rel="noreferrer">View the source ↗</a></article>;

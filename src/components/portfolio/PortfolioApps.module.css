@@ -74,7 +74,6 @@
 .action { display: inline-flex; min-height: 29px; align-items: center; gap: 5px; box-sizing: border-box; margin: 0; padding: 4px 8px; color: #111; font-weight: 700; text-decoration: none; background: #ece9d8; border: 1px solid #003c74; box-shadow: inset 1px 1px #fff, inset -1px -1px #aca899; }
 .action img { width: 16px; height: 16px; image-rendering: auto; }
 .empty { display: grid; place-items: center; align-content: center; min-height: 100%; padding: 18px; text-align: center; }.empty img { width: 64px; }.empty p { max-width: 54ch; }.empty code { padding: 2px 5px; background: #e8edf3; }
-.resume { display: flex; flex-direction: column; height: 100%; }.resume nav { display: flex; gap: 6px; padding: 5px; background: var(--surface); }.resume nav a { color: #111; text-decoration: none; }.resume iframe { flex: 1; width: 100%; min-height: 0; background: #777; border: 0; }
 .contact { min-height: 100%; padding: 15px; background: #ece9d8; }.contact header { margin-bottom: 10px; }
 .addressBook { border-top: 1px solid #aca899; }
 .address { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 8px; background: #fff; border: 1px solid #aca899; border-top: 0; }.address:first-of-type { border-top: 1px solid #aca899; }

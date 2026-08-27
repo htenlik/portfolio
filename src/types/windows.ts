@@ -2,7 +2,6 @@ export type WindowId =
   | 'about'
   | 'experience'
   | 'projects'
-  | 'resume'
   | 'minesweeper'
   | 'contact'
   | 'secret'
