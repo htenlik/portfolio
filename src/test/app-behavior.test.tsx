@@ -3,12 +3,10 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import userEvent from '@testing-library/user-event';
 import { App } from '../app/App';
 import { Desktop } from '../components/desktop/Desktop';
-import { ContactApp, ExperienceApp, ProjectDetailApp, ProjectsApp, ResumeApp } from '../components/portfolio/PortfolioApps';
+import { ContactApp, ExperienceApp, ProjectDetailApp, ProjectsApp } from '../components/portfolio/PortfolioApps';
 import { contact } from '../content/contact';
-import { resumeDownloadName, resumeFile } from '../content/resume';
 import { Taskbar } from '../components/taskbar/Taskbar';
 import { WindowManagerProvider, useWindowManager } from '../state/window-manager/WindowManagerContext';
-import responseHeaders from '../../public/_headers?raw';
 
 function StateProbe() { const { state } = useWindowManager(); return <output data-testid="state">{JSON.stringify(state)}</output>; }
 
@@ -82,19 +80,11 @@ describe('portfolio UI behavior', () => {
     expect(screen.getByRole('button', { name: /secret\.txt, shortcut/i })).toBeInTheDocument();
   });
 
-  it('renders a graceful missing-resume fallback', () => {
-    render(<ResumeApp expectedAvailable={false} />);
-    expect(screen.getByText('The resume is temporarily unavailable. Please try again later.')).toBeInTheDocument();
-    expect(document.body).not.toHaveTextContent(/public\/|repository|configure/i);
-  });
-
-  it('uses the configured resume path for open, download, and preview', () => {
-    const { container } = render(<ResumeApp expectedAvailable />);
-    expect(screen.getByRole('link', { name: 'Open PDF' })).toHaveAttribute('href', resumeFile);
-    expect(screen.getByRole('link', { name: 'Download PDF' })).toHaveAttribute('download', resumeDownloadName);
-    expect(container.querySelector('iframe')).toHaveAttribute('src', '/huseyin_tenlik_cv.pdf#view=FitH&toolbar=1');
-    expect(responseHeaders).toContain('X-Frame-Options: SAMEORIGIN');
-    expect(responseHeaders).not.toContain('X-Frame-Options: DENY');
+  it('does not publish a resume shortcut or Start menu entry', async () => {
+    render(<WindowManagerProvider><Desktop /><Taskbar /></WindowManagerProvider>);
+    expect(screen.queryByRole('button', { name: /Resume\.pdf, shortcut/i })).not.toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: /start/i }));
+    expect(screen.queryByRole('button', { name: 'Resume' })).not.toBeInTheDocument();
   });
 
   it('shows the verified internship workflow live demo with a web icon', () => {
@@ -106,13 +96,17 @@ describe('portfolio UI behavior', () => {
     expect(container.querySelector('a[href="https://internship-workflow-management-syst.vercel.app/"] img')).toHaveAttribute('src', '/icons/globe.svg');
   });
 
-  it('hides empty project categories and exposes the expanded project galleries', async () => {
+  it('hides empty project categories and exposes the complete project galleries', async () => {
     render(<WindowManagerProvider><ProjectsApp /></WindowManagerProvider>);
     expect(screen.queryByRole('button', { name: 'In Progress' })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Professional' })).toBeInTheDocument();
     cleanup();
     render(<ProjectDetailApp id="jotform-sign-analytics" />);
-    expect(screen.getAllByRole('button', { name: /Show image/ })).toHaveLength(4);
+    expect(screen.getAllByRole('button', { name: /Show image/ })).toHaveLength(11);
+    cleanup();
+    render(<ProjectDetailApp id="internship-workflow-management" />);
+    expect(screen.getAllByRole('button', { name: /Show image/ })).toHaveLength(7);
+    expect(screen.queryByRole('button', { name: /Internship workflow from applicant/ })).not.toBeInTheDocument();
   });
 
   it('lists the most recent Jotform experience first', () => {
@@ -124,8 +118,8 @@ describe('portfolio UI behavior', () => {
 
   it('previews the MPI report inside its project gallery', async () => {
     const { container } = render(<ProjectDetailApp id="mpi-gather-torus" />);
-    await userEvent.click(screen.getByRole('button', { name: /Show image 2/ }));
     expect(container.querySelector('iframe')).toHaveAttribute('src', '/media/projects/mpi-torus/BBM442_Huseyin_Tenlik.pdf#view=FitH&toolbar=1');
+    expect(screen.getByRole('button', { name: /Show image 1: BBM442 technical report/ })).toHaveAttribute('aria-pressed', 'true');
     expect(screen.getByRole('link', { name: /Open Technical Report/ })).toHaveAttribute('href', '/media/projects/mpi-torus/BBM442_Huseyin_Tenlik.pdf');
   });
 
