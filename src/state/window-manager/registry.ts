@@ -24,6 +24,7 @@ export const windowRegistry: Record<WindowId, WindowDefinition> = {
   'project/jotform-sign-analytics': definition('project/jotform-sign-analytics', 'Jotform Sign Analytics', '/icons/chart.svg', 170, 48, 780, 570),
   'project/internship-workflow-management': definition('project/internship-workflow-management', 'Internship Workflow Management System', '/icons/chart.svg', 180, 56, 780, 570),
   'project/tasinmaz-management-system': definition('project/tasinmaz-management-system', 'Taşınmaz Yönetim Sistemi', '/icons/chart.svg', 190, 64, 780, 570),
+  'project/minidb-cpp': definition('project/minidb-cpp', 'MiniDB++', '/icons/chart.svg', 196, 68, 780, 570),
   'project/mpi-gather-torus': definition('project/mpi-gather-torus', 'MPI Gather over Torus Topology', '/icons/chart.svg', 200, 72, 780, 570),
 };
 

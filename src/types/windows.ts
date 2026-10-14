@@ -8,6 +8,7 @@ export type WindowId =
   | 'project/jotform-sign-analytics'
   | 'project/internship-workflow-management'
   | 'project/tasinmaz-management-system'
+  | 'project/minidb-cpp'
   | 'project/mpi-gather-torus';
 
 export interface Point { x: number; y: number }

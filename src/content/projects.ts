@@ -2,7 +2,7 @@ export type ProjectCategory = 'Professional' | 'Full Stack' | 'Systems' | 'In Pr
 export interface ProjectLink { label: string; href: string; icon?: string }
 export interface ProjectMedia { src: string; alt: string; kind: 'concept' | 'sanitized' | 'diagram' | 'screenshot' | 'visual' | 'document'; thumbnail?: string }
 export interface Project {
-  id: 'jotform-sign-analytics' | 'internship-workflow-management' | 'tasinmaz-management-system' | 'mpi-gather-torus';
+  id: 'jotform-sign-analytics' | 'internship-workflow-management' | 'tasinmaz-management-system' | 'minidb-cpp' | 'mpi-gather-torus';
   title: string; subtitle: string; categories: readonly ProjectCategory[]; status: string; year?: string; summary: string; role: string;
   challenge: string; contributions: readonly string[]; technologies: readonly string[]; outcomes: readonly string[]; links: readonly ProjectLink[];
   media: readonly ProjectMedia[]; confidentialityNote?: string; featured: boolean;
@@ -67,6 +67,15 @@ export const projects: readonly Project[] = [
     technologies: ['Angular 15', 'TypeScript', 'Bootstrap 5', 'ASP.NET Core Web API', '.NET 8', 'Entity Framework Core', 'JWT', 'OpenLayers'], outcomes: ['Location-aware property workflows', 'Authenticated CRUD and user administration', 'Logging, export, and map visualization'],
     links: [{ label: 'View Repository', href: 'https://github.com/htenlik/Tasinmaz-Management-System', icon: '/icons/github.svg' }],
     media: [{ src: '/media/projects/tasinmaz/tasinmaz-dashboard.png', alt: 'Property management dashboard with records, location filters, and map visualization', kind: 'visual' }],
+  },
+  {
+    id: 'minidb-cpp', title: 'MiniDB++', subtitle: 'Systems / Databases', categories: ['Systems'], status: 'Public Project', year: '2026', featured: true,
+    role: 'Sole developer — storage, indexing, SQL, durability, and networking layers', summary: 'A relational database engine written from scratch in C++20, covering persistent slotted-page storage, B+ tree indexing, SQL parsing and execution, an LRU-K buffer pool, write-ahead logging, crash recovery, and a TCP client/server protocol.',
+    challenge: 'Keep data correct across process crashes at any point while layering SQL execution, indexing, and buffering on top of a page-based storage engine.',
+    contributions: ['Built variable-length slotted pages on fixed 4 KiB pages with stable (PageId, SlotId) record identifiers.', 'Implemented a page-native B+ tree on primary keys with split, merge, deletion, and page reclamation.', 'Wrote a hand-built lexer, parser, semantic binder, and executor for CREATE TABLE, INSERT, SELECT, UPDATE, DELETE, and transactions.', 'Added a 128-frame LRU-K (K = 2) buffer pool with move-only RAII page guards.', 'Implemented a CRC32C-protected segmented WAL with STEAL/NO-FORCE physical REDO and CLR-based UNDO that survives repeated crashes.', 'Added persistent PageLSNs, sharp and fuzzy checkpoints, and safe WAL segment reclamation.', 'Exposed the engine through a versioned binary TCP protocol, server, and client with bounded concurrent sessions.', 'Verified behavior with 77 CTest tests including randomized differential, fuzz-style, and subprocess crash-injection tests.'],
+    technologies: ['C++20', 'CMake', 'B+ trees', 'Write-ahead logging', 'Crash recovery', 'TCP sockets', 'CTest', 'Sanitizers'], outcomes: ['Crash-safe recovery verified by crash-injection tests', 'Checkpoint-aware recovery scanned ~331 KiB of WAL instead of 33.7 MiB in a reproducible benchmark', '77 automated tests in a clean Release run'],
+    links: [{ label: 'View Repository', href: 'https://github.com/htenlik/minidb_cpp', icon: '/icons/github.svg' }],
+    media: [{ src: '/media/projects/minidb/minidb-architecture.svg', alt: 'Layered MiniDB++ architecture from the TCP client down to the disk manager, with WAL, recovery, and checkpoints alongside', kind: 'diagram' }],
   },
   {
     id: 'mpi-gather-torus', title: 'MPI Gather over Torus Topology', subtitle: 'Systems / Parallel Computing', categories: ['Systems'], status: 'Technical Case Study', featured: true,
