@@ -26,7 +26,7 @@ export const experience: readonly ExperienceEntry[] = [
   {
     id: 'tubitak-dream',
     organization: 'TÜBİTAK 1001 ARDEB & Hacettepe DREAM Project',
-    role: 'Scholarship Holder · Supervisor: Prof. Dr. Ayça Kolukısa Tarhan',
+    role: 'R&D · Supervisor: Prof. Dr. Ayça Kolukısa Tarhan',
     dates: 'Oct. 2025 – Jun. 2026',
     context: 'Research work at Hacettepe University focused on domain-specific modeling and open-source software quality assessment.',
     contributions: [
