@@ -1,10 +1,9 @@
-import { useState } from 'react';
+import { useState, type KeyboardEvent } from 'react';
 import { contact, type PublicContact } from '../../content/contact';
 import { experience, training, type ExperienceEntry } from '../../content/experience';
 import { profile } from '../../content/profile';
-import { getProject, projects, type Project, type ProjectCategory } from '../../content/projects';
+import { getProject, isShortcut, projectEntries, type Project, type ProjectCategory, type ProjectEntry } from '../../content/projects';
 import { useWindowManager } from '../../state/window-manager/WindowManagerContext';
-import type { WindowId } from '../../types/windows';
 import styles from './PortfolioApps.module.css';
 
 export function AboutApp() {
@@ -26,15 +25,63 @@ export function ExperienceApp() {
   return <div className={styles.application}><ClassicMenuBar items={['File', 'Edit', 'View', 'Help']} /><div className={styles.addressBar}><strong>Address</strong><span><img src="/icons/briefcase.svg" alt="" /> Experiences</span></div><div className={styles.explorer}><aside aria-label="Experiences and training list"><h2>Experiences</h2>{list(experience, '/icons/briefcase.svg')}<h2 className={styles.asideSection}>Training</h2>{list(training, '/icons/document.svg')}</aside><article className={styles.detail}><p className={styles.eyebrow}>{selected.dates}</p><h2>{selected.organization}</h2><h3>{selected.role}</h3>{selected.context && <section className={styles.group}><h4>Overview</h4><p>{selected.context}</p></section>}{selected.contributions.length > 0 && <section className={styles.group}><h4>Responsibilities and contributions</h4><ul>{selected.contributions.map((item) => <li key={item}>{item}</li>)}</ul></section>}{selected.technologies && <section className={styles.group}><h4>Technologies</h4><ul className={styles.tags}>{selected.technologies.map((item) => <li key={item}>{item}</li>)}</ul></section>}</article></div></div>;
 }
 
-const allCategories: readonly ('All Projects' | ProjectCategory)[] = ['All Projects', 'Professional', 'Full Stack', 'Systems', 'In Progress'];
-export function ProjectsApp() {
-  const categories = allCategories.filter((item) => item === 'All Projects' || projects.some((project) => project.categories.includes(item)));
-  const [category, setCategory] = useState<(typeof allCategories)[number]>('All Projects'); const { openWindow } = useWindowManager();
-  const visible = category === 'All Projects' ? projects : projects.filter((project) => project.categories.includes(category));
-  return <div className={`${styles.projects} ${styles.application}`}><ClassicMenuBar items={['File', 'Edit', 'View', 'Favorites', 'Tools', 'Help']} /><div className={styles.toolbar}><button className="retro-button" type="button" onClick={() => setCategory('All Projects')}>← Back</button><button className="retro-button" type="button" onClick={() => setCategory('All Projects')}>⌂ Folders</button><span>{visible.length} object{visible.length === 1 ? '' : 's'}</span></div><div className={styles.addressBar}><strong>Address</strong><span><img src="/icons/folder.svg" alt="" /> C:\Portfolio\Projects\{category}</span></div><div className={styles.explorer}><aside aria-label="Project categories"><h2>Project Tasks</h2>{categories.map((item) => <button key={item} type="button" className={category === item ? styles.selectedRow : ''} onClick={() => setCategory(item)}><img src="/icons/folder.svg" alt="" /> {item}</button>)}</aside><div className={styles.projectGrid}>{visible.map((project) => <button type="button" key={project.id} className={styles.projectCard} onClick={() => openWindow(`project/${project.id}` as WindowId)}><img src={project.media[0]?.thumbnail ?? project.media[0]?.src} alt="" /><span><strong>{project.title}</strong><small>{project.subtitle} · {project.status}</small><span>{project.summary}</span></span></button>)}</div></div></div>;
+type FolderName = 'All Projects' | ProjectCategory;
+const allCategories: readonly FolderName[] = ['All Projects', 'Professional', 'Full Stack', 'Systems', 'Research', 'Mobile', 'In Progress'];
+
+function NavArrow({ direction }: { direction: 'back' | 'forward' }) {
+  return <svg className={styles.navArrow} viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="9.5" /><path d={direction === 'back' ? 'M15.5 11h-9m3.5-3.5L6.5 11l3.5 3.5' : 'M6.5 11h9M12 7.5l3.5 3.5-3.5 3.5'} /></svg>;
 }
 
-export function ProjectDetailApp({ id }: { id: Project['id'] }) {
+function ProjectRow({ entry }: { entry: ProjectEntry }) {
+  const shortcut = isShortcut(entry);
+  return <>
+    <span className={styles.nameCell}>
+      <span className={styles.fileIcon}><img src="/icons/folder.svg" alt="" />{shortcut && <span className={styles.shortcutArrow} />}</span>
+      <span className={styles.nameText}><strong>{entry.title}</strong><small>{shortcut ? entry.summary : entry.tagline ?? entry.summary}</small></span>
+    </span>
+    <span className={styles.categoryCell}>{entry.subtitle}</span>
+    <span className={styles.stackCell}>{entry.stack.join(', ')}</span>
+    {shortcut && <span className="sr-only">(opens in a new tab)</span>}
+  </>;
+}
+
+export function ProjectsApp() {
+  const folders = allCategories.filter((item) => item === 'All Projects' || projectEntries.some((entry) => entry.categories.includes(item)));
+  const [folder, setFolder] = useState<FolderName>('All Projects'); const { openWindow } = useWindowManager();
+  const visible = folder === 'All Projects' ? projectEntries : projectEntries.filter((entry) => entry.categories.includes(folder));
+  const atRoot = folder === 'All Projects';
+  const moveTab = (event: KeyboardEvent<HTMLButtonElement>) => {
+    const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+    if (!step) return;
+    event.preventDefault();
+    const next = folders[(folders.indexOf(folder) + step + folders.length) % folders.length]!;
+    setFolder(next);
+    event.currentTarget.parentElement?.querySelector<HTMLButtonElement>(`[data-folder="${next}"]`)?.focus();
+  };
+  return <div className={`${styles.projects} ${styles.application}`}>
+    <ClassicMenuBar items={['File', 'Edit', 'View', 'Favorites', 'Tools', 'Help']} />
+    <div className={styles.toolbar}>
+      <button className={styles.navButton} type="button" disabled={atRoot} onClick={() => setFolder('All Projects')}><NavArrow direction="back" />Back</button>
+      <button className={styles.navButton} type="button" disabled aria-label="Forward"><NavArrow direction="forward" /></button>
+      <button className={styles.navButton} type="button" disabled={atRoot} onClick={() => setFolder('All Projects')} aria-label="Up to All Projects"><span className={styles.upIcon}><img src="/icons/folder.svg" alt="" /><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 9V2M2 5l3-3 3 3" /></svg></span></button>
+      <span className={styles.objectCount}>{visible.length} object{visible.length === 1 ? '' : 's'}</span>
+    </div>
+    <div className={styles.addressBar}><strong>Address</strong><span><img src="/icons/folder.svg" alt="" /> C:\Users\Huseyin\Projects\{folder}</span></div>
+    <div className={styles.folderTabs} role="tablist" aria-label="Project categories">
+      {folders.map((item) => <button key={item} type="button" role="tab" data-folder={item} aria-selected={folder === item} tabIndex={folder === item ? 0 : -1} onClick={() => setFolder(item)} onKeyDown={moveTab}><img src="/icons/folder.svg" alt="" />{item}</button>)}
+    </div>
+    <div className={styles.detailsView} role="tabpanel" aria-label={folder}>
+      <div className={styles.columnHeaders} aria-hidden="true"><span>Name</span><span>Category</span><span>Stack</span></div>
+      <ul className={styles.fileList}>
+        {visible.map((entry) => <li key={entry.id}>{isShortcut(entry)
+          ? <a className={styles.fileRow} href={entry.href} target="_blank" rel="noreferrer"><ProjectRow entry={entry} /></a>
+          : <button className={styles.fileRow} type="button" onClick={() => openWindow(`project/${entry.id}`)}><ProjectRow entry={entry} /></button>}</li>)}
+      </ul>
+    </div>
+  </div>;
+}
+
+export function ProjectDetailApp({ id }: { id: string }) {
   const project = getProject(id); if (!project) return <p>Project information is unavailable.</p>;
   return <ProjectCaseStudy project={project} />;
 }
