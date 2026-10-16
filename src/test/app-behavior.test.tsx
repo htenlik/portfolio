@@ -98,8 +98,8 @@ describe('portfolio UI behavior', () => {
 
   it('hides empty project categories and exposes the complete project galleries', async () => {
     render(<WindowManagerProvider><ProjectsApp /></WindowManagerProvider>);
-    expect(screen.queryByRole('button', { name: 'In Progress' })).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Professional' })).toBeInTheDocument();
+    expect(screen.queryByRole('tab', { name: 'In Progress' })).not.toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: 'Professional' })).toBeInTheDocument();
     cleanup();
     render(<ProjectDetailApp id="jotform-sign-analytics" />);
     expect(screen.getAllByRole('button', { name: /Show image/ })).toHaveLength(11);
@@ -107,6 +107,21 @@ describe('portfolio UI behavior', () => {
     render(<ProjectDetailApp id="internship-workflow-management" />);
     expect(screen.getAllByRole('button', { name: /Show image/ })).toHaveLength(7);
     expect(screen.queryByRole('button', { name: /Internship workflow from applicant/ })).not.toBeInTheDocument();
+  });
+
+  it('lists case studies and repository shortcuts in one details view', async () => {
+    render(<WindowManagerProvider><ProjectsApp /><StateProbe /></WindowManagerProvider>);
+    const rows = screen.getAllByRole('listitem');
+    expect(rows[0]).toHaveTextContent('MiniDB++');
+    expect(screen.getByText('9 objects')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /OSS-QMET/ })).toHaveAttribute('href', 'https://github.com/htenlik/open-source-software');
+    expect(screen.getByRole('link', { name: /OSS-QMET/ })).toHaveAttribute('target', '_blank');
+    await userEvent.click(screen.getByRole('button', { name: /MiniDB\+\+/ }));
+    expect(screen.getByTestId('state')).toHaveTextContent('"project/minidb-cpp"');
+    await userEvent.click(screen.getByRole('tab', { name: 'Research' }));
+    expect(screen.getByRole('tab', { name: 'Research' })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getAllByRole('listitem')).toHaveLength(2);
+    expect(screen.queryByText('MiniDB++')).not.toBeInTheDocument();
   });
 
   it('lists the most recent Jotform experience first', () => {

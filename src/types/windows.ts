@@ -1,14 +1,14 @@
-export type WindowId =
+type StaticWindowId =
   | 'about'
   | 'experience'
   | 'projects'
   | 'minesweeper'
   | 'contact'
-  | 'secret'
-  | 'project/jotform-sign-analytics'
-  | 'project/internship-workflow-management'
-  | 'project/tasinmaz-management-system'
-  | 'project/mpi-gather-torus';
+  | 'secret';
+
+/** Case-study windows are created from src/content/projects.ts, one per project id. */
+export type ProjectWindowId = `project/${string}`;
+export type WindowId = StaticWindowId | ProjectWindowId;
 
 export interface Point { x: number; y: number }
 export interface Size { width: number; height: number }
@@ -32,3 +32,5 @@ export interface WindowInstance extends WindowDefinition {
   isMinimized: boolean;
   isMaximized: boolean;
 }
+
+export type WindowMap = Partial<Record<StaticWindowId, WindowInstance>> & { [id: ProjectWindowId]: WindowInstance };

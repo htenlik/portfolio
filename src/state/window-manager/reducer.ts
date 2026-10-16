@@ -1,8 +1,8 @@
 import { windowRegistry } from './registry';
-import type { Point, ResizeViewport, Size, WindowId, WindowInstance } from '../../types/windows';
+import type { Point, ResizeViewport, Size, WindowId, WindowInstance, WindowMap } from '../../types/windows';
 
 export interface WindowManagerState {
-  windows: Partial<Record<WindowId, WindowInstance>>;
+  windows: WindowMap;
   activeId: WindowId | null;
   topZ: number;
 }
@@ -56,6 +56,7 @@ export function windowReducer(state: WindowManagerState, action: WindowAction): 
     case 'OPEN': {
       if (existing?.isOpen) return focus(state, action.id);
       const source = existing ?? windowRegistry[action.id];
+      if (!source) return state;
       const zIndex = state.topZ + 1;
       return {
         ...state, activeId: action.id, topZ: zIndex,

@@ -26,7 +26,7 @@ export const experience: readonly ExperienceEntry[] = [
   {
     id: 'tubitak-dream',
     organization: 'TÜBİTAK 1001 ARDEB & Hacettepe DREAM Project',
-    role: 'Scholarship Holder · Supervisor: Prof. Dr. Ayça Kolukısa Tarhan',
+    role: 'R&D · Supervisor: Prof. Dr. Ayça Kolukısa Tarhan',
     dates: 'Oct. 2025 – Jun. 2026',
     context: 'Research work at Hacettepe University focused on domain-specific modeling and open-source software quality assessment.',
     contributions: [
@@ -53,6 +53,18 @@ export const experience: readonly ExperienceEntry[] = [
 ];
 
 export const training: readonly ExperienceEntry[] = [
+  {
+    id: 'kampplus-android',
+    organization: 'GSB & Turkcell Kamp+ Android Tech Camp',
+    role: 'Mobile Application Development Program',
+    dates: 'Sep. 2026',
+    contributions: [
+      'Extended the camp\'s Kotlin and Jetpack Compose reference weather application into Hava 1.1.0.',
+      'Added offline caching, device location, persistent settings, localization, adaptive UI, and accessibility improvements.',
+      'Set up CI-backed testing with 60 unit tests.',
+    ],
+    technologies: ['Kotlin', 'Jetpack Compose', 'Room', 'Hilt', 'CI'],
+  },
   {
     id: 'inzva-camp',
     organization: 'Algorithm Winter & Summer Camp 2025',

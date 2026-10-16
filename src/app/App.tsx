@@ -37,7 +37,7 @@ function Shell() {
         if (item.id === 'contact') content = <ContactApp />;
         if (item.id === 'minesweeper') content = <Minesweeper key={minesweeperLaunch.key} initialDifficulty={minesweeperLaunch.difficulty} onWin={unlockSecret} onExit={() => closeWindow('minesweeper')} onBoardSizeChange={sizeMinesweeper} />;
         if (item.id === 'secret') content = <article className={styles.secret}><img src="/icons/secret.svg" alt="" /><p>You cleared the field.</p><p>That probably means you are persistent enough to inspect the rest of the system too.</p><p>Thanks for visiting htenlikOS.</p><a href="https://github.com/htenlik/portfolio" target="_blank" rel="noreferrer">View the source ↗</a></article>;
-        if (item.id.startsWith('project/')) content = <ProjectDetailApp id={item.id.slice(8) as Parameters<typeof ProjectDetailApp>[0]['id']} />;
+        if (item.id.startsWith('project/')) content = <ProjectDetailApp id={item.id.slice('project/'.length)} />;
         return <AppWindow key={item.id} window={item}>{content}</AppWindow>;
       })}
       <Taskbar />
