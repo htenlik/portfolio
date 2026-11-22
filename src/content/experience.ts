@@ -2,7 +2,7 @@ export interface ExperienceEntry {
   id: string;
   organization: string;
   role: string;
-  dates: string;
+  dates?: string;
   context?: string;
   contributions: readonly string[];
   technologies?: readonly string[];
@@ -10,45 +10,63 @@ export interface ExperienceEntry {
 
 export const experience: readonly ExperienceEntry[] = [
   {
+    id: 'aselsan',
+    organization: 'ASELSAN',
+    role: 'Part-time Engineer',
+    dates: 'Nov. 2026 – Present',
+    context: 'Newly joined a part-time engineering role in Ankara, Türkiye, with an expected focus on software testing.',
+    contributions: [],
+  },
+  {
     id: 'jotform',
     organization: 'Jotform',
     role: 'Backend Developer Intern',
     dates: 'Jun. 2026 – Aug. 2026',
-    context: 'Worked in a three-person team on a PHP-based Sign Analytics and AI Insights product.',
+    context: 'Built Sign Insights, an analytics MVP for Jotform Sign, in a three-intern team.',
     contributions: [
-      'Built REST APIs and aggregation pipelines for filters, field analytics, event activity, daily signing and engagement trends, document metadata, and signer sessions.',
-      'Developed field-friction scoring and AI-assisted insight and health assessments.',
-      'Documented APIs with OpenAPI and used privacy-aware metadata handling.',
-      'Added contract tests and helped prepare the product demo.',
+      'Built the PHP backend and reconstructed signing sessions with document/session composite keys to prevent cross-document session collisions.',
+      'Kept dashboard summaries, engagement trends, field analytics, and session views consistent under shared filters; derived session status from complete event histories to avoid date-filter misclassification.',
+      'Implemented field-friction scoring and converted sanitized AI reports into readable summaries; maintained unit and contract tests, OpenAPI documentation, and authorized access to signer metadata.',
+      'Took on JavaScript frontend integration in the final two weeks, connecting Overview, Fields, and AI Insights for a working end-to-end MVP demo.',
     ],
-    technologies: ['PHP', 'REST APIs', 'Analytics', 'OpenAPI', 'Contract testing'],
+    technologies: ['PHP', 'JavaScript', 'REST APIs', 'Analytics', 'OpenAPI', 'Unit and contract testing'],
   },
   {
     id: 'tubitak-dream',
-    organization: 'TÜBİTAK 1001 ARDEB & Hacettepe DREAM Project',
-    role: 'R&D · Supervisor: Prof. Dr. Ayça Kolukısa Tarhan',
+    organization: 'Hacettepe University – TÜBİTAK ARDEB 1001 (DREAM)',
+    role: 'Research Scholar & Software Developer',
     dates: 'Oct. 2025 – Jun. 2026',
-    context: 'Research work at Hacettepe University focused on domain-specific modeling and open-source software quality assessment.',
+    context: 'Selected for a research scholarship in domain-specific modeling and open-source software quality assessment. Developed OSS-QMET with one other undergraduate, supervised by Prof. Dr. Ayça Kolukısa.',
     contributions: [
-      'Owned the primary web application across a React frontend, Spring Boot backend, PostgreSQL database, and Docker development environment.',
-      'Developed backend services for DSL-based modeling infrastructure and persistence.',
-      'Implemented consistency checks and model-integrity controls for research workflows.',
+      'Built model and data management, visualization workflows, a visual quality-model editor, and a DSL parser with Java/Spring Boot, React, and PostgreSQL.',
+      'Implemented nested quality-model persistence with Spring Data JPA and versioned schema changes with Flyway.',
+      'Added Docker packaging, unit tests, and Playwright end-to-end tests.',
     ],
-    technologies: ['React', 'Spring Boot', 'PostgreSQL', 'Docker', 'DSL modeling'],
+    technologies: ['Java', 'Spring Boot', 'Spring Data JPA', 'React', 'PostgreSQL', 'Flyway', 'Docker', 'DSL parsing', 'Playwright'],
   },
   {
     id: 'odakgis',
     organization: 'OdakGIS',
     role: 'Part-time Full Stack Web Developer',
-    dates: 'Apr. 2025 – Oct. 2025',
-    context: 'Worked on government-supported web-based geographic information system applications.',
+    dates: 'Mar. 2025 – Oct. 2025',
+    context: 'Core contributor to municipal zoning, building-permit, and geographic information system applications.',
     contributions: [
-      'Developed frontend modules, REST APIs, and database schemas with Angular, .NET, PostgreSQL, OpenLayers, and GeoServer.',
-      'Contributed to data management, debugging, and workflow improvements across GIS applications.',
-      'Implemented map and image upload, visualization, and location-oriented interface features.',
-      'Owned modules from implementation through deployment support.',
+      'Helped build Yedikule E-Imar from scratch, digitizing paper-based zoning and building-permit workflows for contractors, engineers, and municipal staff with C#/ASP.NET Core 8, Angular, and PostgreSQL/PostGIS.',
+      'Presented the application on-site at Kırşehir Municipality and helped correct approval/signing flows, staff handoffs, editing permissions, UI validations, and API checks.',
+      'Extended OdakMAP, the shared OpenLayers/GeoServer foundation for finance and utility products; built map queries and helped migrate the platform and downstream applications from Angular 7 to 15.',
+      'Restored large permit-document submission by adjusting server limits, streaming uploads, and adding frontend retries.',
+      'Built UI, REST API, and database support for attaching photos and albums to map-selected graves in MBS, used by Istanbul Metropolitan Municipality and other municipalities.',
     ],
-    technologies: ['Angular', '.NET', 'PostgreSQL', 'OpenLayers', 'GeoServer', 'GIS'],
+    technologies: ['Angular', 'C#', 'ASP.NET Core 8', 'PostgreSQL', 'PostGIS', 'OpenLayers', 'GeoServer', 'GIS'],
+  },
+  {
+    id: 'outlier',
+    organization: 'Outlier',
+    role: 'Generative AI Evaluation · Project-based contract',
+    contributions: [
+      'Designed multi-turn scenarios and evaluation rubrics for coding, reasoning, research, and multimodal tasks.',
+      'Compared model outputs and documented failures in correctness, instruction following, tool use, and reliability.',
+    ],
   },
 ];
 
@@ -71,9 +89,9 @@ export const training: readonly ExperienceEntry[] = [
     role: 'inzva · Istanbul',
     dates: '2025',
     contributions: [
-      'Selected as one of 50 participants from more than 300 applicants.',
+      'Selected as one of 50 participants from more than 400 applicants.',
       'Studied advanced dynamic programming, graphs, and trees.',
-      'Solved more than 50 Algoleague problems and competed in an ICPC-style contest.',
+      'Solved more than 100 problems, mainly in C++, and competed in an ICPC-style contest.',
     ],
   },
   {
