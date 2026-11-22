@@ -124,11 +124,13 @@ describe('portfolio UI behavior', () => {
     expect(screen.queryByText('MiniDB++')).not.toBeInTheDocument();
   });
 
-  it('lists the most recent Jotform experience first', () => {
+  it('opens the current role first and supports selecting undated contract work', async () => {
     render(<ExperienceApp />);
     const experienceButtons = screen.getAllByRole('button').filter((button) => button.textContent?.includes('2026') || button.textContent?.includes('2025'));
-    expect(experienceButtons[0]).toHaveTextContent('Jotform');
-    expect(screen.getByRole('heading', { name: 'Jotform' })).toBeInTheDocument();
+    expect(experienceButtons[0]).toHaveTextContent('ASELSAN');
+    expect(screen.getByRole('heading', { name: 'ASELSAN' })).toBeInTheDocument();
+    await userEvent.click(screen.getByRole('button', { name: 'Outlier' }));
+    expect(screen.getByRole('heading', { name: 'Generative AI Evaluation · Project-based contract' })).toBeInTheDocument();
   });
 
   it('previews the MPI report inside its project gallery', async () => {
